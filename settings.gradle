@@ -1,0 +1,4 @@
+rootProject.name = 'nostr-proto'
+
+include 'nostr:nostr-proto'
+include 'nostr:nostr-proto-json'
