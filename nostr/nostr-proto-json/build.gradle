@@ -11,8 +11,10 @@ dependencies {
 
     testImplementation ("io.github.theborakompanioni:nostr-core:${nostrSpringBootStarterVersion}") {
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'
+        exclude group: 'io.github.theborakompanioni', module: 'nostr-proto-json'
     }
     testImplementation ("io.github.theborakompanioni:nostr-identity:${nostrSpringBootStarterVersion}") {
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'
+        exclude group: 'io.github.theborakompanioni', module: 'nostr-proto-json'
     }
 }
