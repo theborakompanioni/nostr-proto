@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Breaking
-- build ProfileMetadata class from protobuf definition
+## [0.2.0] - 2025-01-06
+
+### Added
+- add ProfileMetadata message to protobuf definitions
 
 ### Removed
 - Remove dependency to guava
@@ -17,5 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/theborakompanioni/nostr-proto/compare/0.1.0...HEAD
+[Unreleased]: https://github.com/theborakompanioni/nostr-proto/compare/0.2.0...HEAD
+[0.2.0]: https://github.com/theborakompanioni/nostr-proto/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/theborakompanioni/nostr-proto/releases/tag/0.1.0
