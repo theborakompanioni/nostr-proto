@@ -1,7 +1,7 @@
 ext {
     jacksonJrVersion = '2.18.2'
     grpcVersion = '1.69.0'
-    protobufVersion = '3.22.3'
+    protobufVersion = '4.29.2'
     protocVersion = protobufVersion
     checkstyleVersion = '10.3.4'
     findsecbugsPluginVersion = '1.12.0'
