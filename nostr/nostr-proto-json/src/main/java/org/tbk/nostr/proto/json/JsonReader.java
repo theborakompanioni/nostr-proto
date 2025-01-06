@@ -1,7 +1,7 @@
 package org.tbk.nostr.proto.json;
 
-import org.tbk.nostr.base.Metadata;
 import org.tbk.nostr.proto.Event;
+import org.tbk.nostr.proto.ProfileMetadata;
 import org.tbk.nostr.proto.Request;
 import org.tbk.nostr.proto.Response;
 
@@ -23,7 +23,7 @@ public final class JsonReader {
         return JsonResponseReader.fromJson(val, response);
     }
 
-    public static Metadata fromJson(String val, Metadata.Builder metadata) {
+    public static ProfileMetadata fromJson(String val, ProfileMetadata.Builder metadata) {
         return JsonResponseReader.fromJson(val, metadata);
     }
 

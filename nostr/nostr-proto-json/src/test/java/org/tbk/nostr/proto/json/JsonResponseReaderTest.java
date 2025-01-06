@@ -2,7 +2,6 @@ package org.tbk.nostr.proto.json;
 
 import com.google.protobuf.ByteString;
 import org.junit.jupiter.api.Test;
-import org.tbk.nostr.base.Metadata;
 import org.tbk.nostr.proto.*;
 
 import java.net.URI;
@@ -274,28 +273,28 @@ class JsonResponseReaderTest {
 
     @Test
     void itShouldParseMetadata0() {
-        Metadata metadata = JsonReader.fromJson("""
+        ProfileMetadata metadata = JsonReader.fromJson("""
                 {
                   "name": "name",
                   "about": "about",
                   "picture": "https://www.example.com/example.png"
                 }
-                """, Metadata.newBuilder());
+                """, ProfileMetadata.newBuilder());
 
         assertThat(metadata.getName(), is("name"));
         assertThat(metadata.getAbout(), is("about"));
-        assertThat(metadata.getPicture(), is(URI.create("https://www.example.com/example.png")));
-        assertThat(metadata.getDisplayName(), is(nullValue()));
-        assertThat(metadata.getWebsite(), is(nullValue()));
-        assertThat(metadata.getBanner(), is(nullValue()));
-        assertThat(metadata.getBot(), is(nullValue()));
-        assertThat(metadata.getNip05(), is(nullValue()));
-        assertThat(metadata.getLud16(), is(nullValue()));
+        assertThat(metadata.getPicture(), is(URI.create("https://www.example.com/example.png").toString()));
+        assertThat(metadata.getDisplayName(), is(""));
+        assertThat(metadata.getWebsite(), is(""));
+        assertThat(metadata.getBanner(), is(""));
+        assertThat(metadata.getBot(), is(false));
+        assertThat(metadata.getNip05(), is(""));
+        assertThat(metadata.getLud16(), is(""));
     }
 
     @Test
     void itShouldParseMetadata1() {
-        Metadata metadata = JsonReader.fromJson("""
+        ProfileMetadata metadata = JsonReader.fromJson("""
                 {
                   "name": "name",
                   "about": "about",
@@ -307,14 +306,14 @@ class JsonResponseReaderTest {
                   "nip05": "nip05@example.com",
                   "lud16": "lud16@example.com"
                 }
-                """, Metadata.newBuilder());
+                """, ProfileMetadata.newBuilder());
 
         assertThat(metadata.getName(), is("name"));
         assertThat(metadata.getAbout(), is("about"));
-        assertThat(metadata.getPicture(), is(URI.create("https://www.example.com/picture.png")));
+        assertThat(metadata.getPicture(), is(URI.create("https://www.example.com/picture.png").toString()));
         assertThat(metadata.getDisplayName(), is("display name"));
-        assertThat(metadata.getWebsite(), is(URI.create("https://www.example.com/")));
-        assertThat(metadata.getBanner(), is(URI.create("https://www.example.com/banner.png")));
+        assertThat(metadata.getWebsite(), is(URI.create("https://www.example.com/").toString()));
+        assertThat(metadata.getBanner(), is(URI.create("https://www.example.com/banner.png").toString()));
         assertThat(metadata.getBot(), is(Boolean.TRUE));
         assertThat(metadata.getNip05(), is("nip05@example.com"));
         assertThat(metadata.getLud16(), is("lud16@example.com"));
@@ -322,66 +321,48 @@ class JsonResponseReaderTest {
 
     @Test
     void itShouldParseMetadata2() {
-        Metadata metadata0 = JsonReader.fromJson("{}", Metadata.newBuilder());
+        ProfileMetadata metadata0 = JsonReader.fromJson("{}", ProfileMetadata.newBuilder());
 
-        assertThat(metadata0.getName(), is(nullValue()));
-        assertThat(metadata0.getAbout(), is(nullValue()));
-        assertThat(metadata0.getPicture(), is(nullValue()));
-        assertThat(metadata0.getDisplayName(), is(nullValue()));
-        assertThat(metadata0.getWebsite(), is(nullValue()));
-        assertThat(metadata0.getBanner(), is(nullValue()));
-        assertThat(metadata0.getBot(), is(nullValue()));
-        assertThat(metadata0.getNip05(), is(nullValue()));
-        assertThat(metadata0.getLud16(), is(nullValue()));
+        assertThat(metadata0.getName(), is(""));
+        assertThat(metadata0.getAbout(), is(""));
+        assertThat(metadata0.getPicture(), is(""));
+        assertThat(metadata0.getDisplayName(), is(""));
+        assertThat(metadata0.getWebsite(), is(""));
+        assertThat(metadata0.getBanner(), is(""));
+        assertThat(metadata0.getBot(), is(false));
+        assertThat(metadata0.getNip05(), is(""));
+        assertThat(metadata0.getLud16(), is(""));
 
-        Metadata metadata1 = JsonReader.fromJson("""
+        ProfileMetadata metadata1 = JsonReader.fromJson("""
                 {
                   "name": "name"
                 }
-                """, Metadata.newBuilder());
+                """, ProfileMetadata.newBuilder());
 
         assertThat(metadata1.getName(), is("name"));
-        assertThat(metadata1.getAbout(), is(nullValue()));
-        assertThat(metadata1.getPicture(), is(nullValue()));
-        assertThat(metadata1.getDisplayName(), is(nullValue()));
-        assertThat(metadata1.getWebsite(), is(nullValue()));
-        assertThat(metadata1.getBanner(), is(nullValue()));
-        assertThat(metadata1.getBot(), is(nullValue()));
-        assertThat(metadata1.getNip05(), is(nullValue()));
-        assertThat(metadata1.getLud16(), is(nullValue()));
+        assertThat(metadata1.getAbout(), is(""));
+        assertThat(metadata1.getPicture(), is(""));
 
-        Metadata metadata2 = JsonReader.fromJson("""
+        ProfileMetadata metadata2 = JsonReader.fromJson("""
                 {
                   "about": "about"
                 }
-                """, Metadata.newBuilder());
+                """, ProfileMetadata.newBuilder());
 
-        assertThat(metadata2.getName(), is(nullValue()));
+        assertThat(metadata2.getName(), is(""));
         assertThat(metadata2.getAbout(), is("about"));
-        assertThat(metadata2.getPicture(), is(nullValue()));
-        assertThat(metadata2.getDisplayName(), is(nullValue()));
-        assertThat(metadata2.getWebsite(), is(nullValue()));
-        assertThat(metadata2.getBanner(), is(nullValue()));
-        assertThat(metadata2.getBot(), is(nullValue()));
-        assertThat(metadata2.getNip05(), is(nullValue()));
-        assertThat(metadata2.getLud16(), is(nullValue()));
+        assertThat(metadata2.getPicture(), is(""));
 
 
-        Metadata metadata3 = JsonReader.fromJson("""
+        ProfileMetadata metadata3 = JsonReader.fromJson("""
                 {
                   "picture": "https://www.example.com/example.png"
                 }
-                """, Metadata.newBuilder());
+                """, ProfileMetadata.newBuilder());
 
-        assertThat(metadata3.getName(), is(nullValue()));
-        assertThat(metadata3.getAbout(), is(nullValue()));
-        assertThat(metadata3.getPicture(), is(URI.create("https://www.example.com/example.png")));
-        assertThat(metadata3.getDisplayName(), is(nullValue()));
-        assertThat(metadata3.getWebsite(), is(nullValue()));
-        assertThat(metadata3.getBanner(), is(nullValue()));
-        assertThat(metadata3.getBot(), is(nullValue()));
-        assertThat(metadata3.getNip05(), is(nullValue()));
-        assertThat(metadata3.getLud16(), is(nullValue()));
+        assertThat(metadata3.getName(), is(""));
+        assertThat(metadata3.getAbout(), is(""));
+        assertThat(metadata3.getPicture(), is(URI.create("https://www.example.com/example.png").toString()));
     }
 
     @Test
@@ -400,26 +381,15 @@ class JsonResponseReaderTest {
 
         Event event = JsonReader.fromJson(json, Event.newBuilder());
 
-        Metadata metadata = JsonReader.fromJson(event.getContent(), Metadata.newBuilder());
+        ProfileMetadata metadata = JsonReader.fromJson(event.getContent(), ProfileMetadata.newBuilder());
         assertThat(metadata.getName(), is("Gigi"));
         assertThat(metadata.getAbout(), is(startsWith("not")));
-        assertThat(metadata.getPicture(), is(URI.create("https://dergigi.com/assets/images/avatars/07.png")));
+        assertThat(metadata.getPicture(), is(URI.create("https://dergigi.com/assets/images/avatars/07.png").toString()));
         assertThat(metadata.getDisplayName(), is("Gigi"));
-        assertThat(metadata.getWebsite(), is(URI.create("https://dergigi.com")));
-        assertThat(metadata.getBanner(), is(URI.create("https://cdn.nostr.build/i/0aeb7560c271bbb1cef00760989acd9dd3f37bdc42b37852eecb0d0b70a3e862.jpg")));
-        assertThat(metadata.getBot(), is(nullValue()));
+        assertThat(metadata.getWebsite(), is(URI.create("https://dergigi.com").toString()));
+        assertThat(metadata.getBanner(), is(URI.create("https://cdn.nostr.build/i/0aeb7560c271bbb1cef00760989acd9dd3f37bdc42b37852eecb0d0b70a3e862.jpg").toString()));
+        assertThat(metadata.getBot(), is(false));
         assertThat(metadata.getNip05(), is("_@dergigi.com"));
         assertThat(metadata.getLud16(), is("dergigi@primal.net"));
-    }
-
-    @Test
-    void itShouldParseMetadata3FailOnInvalidPictureUri() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            JsonReader.fromJson("""
-                    {
-                      "picture": "not a valid uri"
-                    }
-                    """, Metadata.newBuilder());
-        });
     }
 }

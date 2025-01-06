@@ -5,13 +5,16 @@ plugins {
 description = 'nostr proto json package'
 
 dependencies {
-    api "io.github.theborakompanioni:nostr-base:${nostrSpringBootStarterVersion}"
     api project(':nostr:nostr-proto')
 
     implementation "com.fasterxml.jackson.jr:jackson-jr-all:${jacksonJrVersion}"
 
     implementation "com.google.guava:guava:${guavaVersion}"
 
-    testImplementation "io.github.theborakompanioni:nostr-core:${nostrSpringBootStarterVersion}"
-    testImplementation "io.github.theborakompanioni:nostr-identity:${nostrSpringBootStarterVersion}"
+    testImplementation ("io.github.theborakompanioni:nostr-core:${nostrSpringBootStarterVersion}") {
+        exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'
+    }
+    testImplementation ("io.github.theborakompanioni:nostr-identity:${nostrSpringBootStarterVersion}") {
+        exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'
+    }
 }

@@ -1,10 +1,6 @@
 package org.tbk.nostr.proto.json;
 
-import org.tbk.nostr.base.Metadata;
-import org.tbk.nostr.proto.Event;
-import org.tbk.nostr.proto.EventOrBuilder;
-import org.tbk.nostr.proto.Request;
-import org.tbk.nostr.proto.Response;
+import org.tbk.nostr.proto.*;
 
 import java.io.IOException;
 
@@ -24,7 +20,7 @@ public final class JsonWriter {
         return JsonRequestWriter.toJson(val);
     }
 
-    public static String toJson(Metadata val) {
+    public static String toJson(ProfileMetadata val) {
         return JsonRequestWriter.toJson(val);
     }
 
