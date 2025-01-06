@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## Changed
+- update grpc from v1.56.0 to v1.69.0
 - update jackson-jr-all from v2.16.1 to v2.18.2
 
 ## [0.2.0] - 2025-01-06
