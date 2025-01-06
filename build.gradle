@@ -92,7 +92,6 @@ subprojects {
     apply plugin: 'com.netflix.nebula.facet'
     apply plugin: 'com.netflix.nebula.integtest-standalone'
     apply plugin: 'io.spring.dependency-management'
-    apply from: "${project.rootDir}/publish.gradle"
 
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
@@ -263,4 +262,8 @@ subprojects {
                 'Build-Url',
         ]
     }
+}
+
+configure(subprojects.findAll { project -> project.subprojects.isEmpty() }) {
+    apply from: "${project.rootDir}/publish.gradle"
 }
