@@ -3,7 +3,6 @@ package org.tbk.nostr.proto.json;
 import com.fasterxml.jackson.jr.ob.JSONComposer;
 import com.fasterxml.jackson.jr.ob.comp.ArrayComposer;
 import com.fasterxml.jackson.jr.ob.comp.ObjectComposer;
-import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import org.tbk.nostr.proto.*;
 
@@ -144,7 +143,7 @@ final class JsonRequestWriter {
      * @param event an event
      * @return given event serialized as json
      */
-    @VisibleForTesting
+    // @VisibleForTesting
     static String toJson(Event event) {
         try {
             return json.asString(Json.asMap(event));
@@ -153,7 +152,7 @@ final class JsonRequestWriter {
         }
     }
 
-    @VisibleForTesting
+    // @VisibleForTesting
     static String toJson(Filter filter) {
         try {
             return json.asString(Json.asMap(filter));

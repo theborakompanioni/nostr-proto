@@ -120,8 +120,6 @@ subprojects {
         testCompileOnly "com.github.spotbugs:spotbugs-annotations:${spotbugs.toolVersion.get()}"
         spotbugsPlugins "com.h3xstream.findsecbugs:findsecbugs-plugin:${findsecbugsPluginVersion}"
 
-        implementation 'org.slf4j:slf4j-api'
-
         testImplementation 'org.junit.jupiter:junit-jupiter-api'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
         testImplementation('org.springframework.boot:spring-boot-starter-test') {

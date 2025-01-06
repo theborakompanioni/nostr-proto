@@ -3,9 +3,6 @@ package org.tbk.nostr.proto.json;
 import com.fasterxml.jackson.jr.ob.JSON;
 import com.fasterxml.jackson.jr.ob.JSONComposer;
 import com.fasterxml.jackson.jr.ob.comp.ArrayComposer;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -120,14 +117,13 @@ final class Json {
     }
 
     private static List<TagValue> tagsFromList(List<List<String>> tags) {
-        return ImmutableList.<TagValue>builder()
-                .addAll(tags.stream().filter(it -> !it.isEmpty())
-                        .map(it -> TagValue.newBuilder()
-                                .setName(it.getFirst())
-                                .addAllValues(Iterables.skip(it, 1))
-                                .build())
-                        .toList())
-                .build();
+        return tags.stream()
+                .filter(it -> !it.isEmpty())
+                .map(it -> TagValue.newBuilder()
+                        .setName(it.getFirst())
+                        .addAllValues(it.stream().skip(1).toList())
+                        .build())
+                .toList();
     }
 
     /**
@@ -147,15 +143,15 @@ final class Json {
      * </code>
      */
     static Map<String, Object> asMap(Event val) {
-        return ImmutableMap.<String, Object>builder()
-                .put(eventIdField.getJsonName(), HexFormat.of().formatHex(val.getId().toByteArray()))
-                .put(eventPubkeyField.getJsonName(), HexFormat.of().formatHex(val.getPubkey().toByteArray()))
-                .put(eventCreatedAtField.getJsonName(), val.getCreatedAt())
-                .put(eventKindField.getJsonName(), val.getKind())
-                .put(eventTagsField.getJsonName(), listFromTags(val.getTagsList()))
-                .put(eventContentField.getJsonName(), val.getContent())
-                .put(eventSigField.getJsonName(), HexFormat.of().formatHex(val.getSig().toByteArray()))
-                .build();
+        return Map.of(
+                eventIdField.getJsonName(), HexFormat.of().formatHex(val.getId().toByteArray()),
+                eventPubkeyField.getJsonName(), HexFormat.of().formatHex(val.getPubkey().toByteArray()),
+                eventCreatedAtField.getJsonName(), val.getCreatedAt(),
+                eventKindField.getJsonName(), val.getKind(),
+                eventTagsField.getJsonName(), listFromTags(val.getTagsList()),
+                eventContentField.getJsonName(), val.getContent(),
+                eventSigField.getJsonName(), HexFormat.of().formatHex(val.getSig().toByteArray())
+        );
     }
 
     static List<List<String>> listFromTags(List<TagValue> tags) {
@@ -249,7 +245,7 @@ final class Json {
      * </code>
      */
     static Map<String, Object> asMap(Filter filter) {
-        ImmutableMap.Builder<String, Object> builder = ImmutableMap.builder();
+        Map<String, Object> builder = new HashMap<>();
 
         if (!filter.getIdsList().isEmpty()) {
             builder.put(filterIdsField.getJsonName(), filter.getIdsList()
@@ -287,7 +283,7 @@ final class Json {
             builder.put(filterSearchField.getJsonName(), filter.getSearch());
         }
 
-        return builder.build();
+        return Collections.unmodifiableMap(builder);
     }
 
 
