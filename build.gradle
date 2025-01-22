@@ -33,7 +33,7 @@ contacts {
     }
 }
 
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         // check for updates in modules every build
         cacheChangingModulesFor 0, 'seconds'
@@ -147,7 +147,7 @@ subprojects {
         from sourceSets.main.java
     }
 
-    task testJar(type: Jar) {
+    tasks.register('testJar', Jar) {
         archiveClassifier.set('test')
         from sourceSets.test.output
     }
@@ -187,7 +187,7 @@ subprojects {
         archives testJar
     }
 
-    tasks.withType(Test) {
+    tasks.withType(Test).configureEach {
         testLogging {
             // set options for log level LIFECYCLE
             events TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
@@ -207,7 +207,7 @@ subprojects {
         }
     }
 
-    task dependencyTree(type: DependencyReportTask) {}
+    tasks.register('dependencyTree', DependencyReportTask) {}
 
     javadoc {
         onlyIf { project.hasProperty('javadocEnabled') }
@@ -221,7 +221,7 @@ subprojects {
         excludeFilter = rootProject.file('./spotbugs-exclude.xml')
         reportsDir = rootProject.file("$rootProject.layout.buildDirectory/reports/spotbugs/$project.name")
     }
-    tasks.withType(SpotBugsTask) {
+    tasks.withType(SpotBugsTask).configureEach {
         onlyIf { gradle.taskGraph.hasTask('build') }
         reports {
             html.required = true
@@ -236,7 +236,7 @@ subprojects {
         ignoreFailures = false
         reportsDir = rootProject.file("$rootProject.layout.buildDirectory/reports/checkstyle/$project.name")
     }
-    tasks.withType(Checkstyle) {
+    tasks.withType(Checkstyle).configureEach {
         onlyIf { gradle.taskGraph.hasTask('build') }
         /*reports {
             xml.enabled = false
@@ -244,7 +244,7 @@ subprojects {
         }*/
     }
 
-    tasks.withType(AbstractArchiveTask) {
+    tasks.withType(AbstractArchiveTask).configureEach {
         // activate reproducible archives
         // see https://docs.gradle.org/current/userguide/working_with_files.html#sec:reproducible_archives
         preserveFileTimestamps = false
