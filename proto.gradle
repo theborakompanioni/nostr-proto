@@ -7,12 +7,12 @@ sourceSets {
             srcDir file('src/main/java')
         }
         java {
-            srcDir new File("${layout.buildDirectory}", '/generated/source/proto/main/java')
-            srcDir new File("${layout.buildDirectory}", '/generated/source/proto/main/grpc')
+            srcDir new File("${layout.buildDirectory}", '/generated/sources/proto/main/java')
+            srcDir new File("${layout.buildDirectory}", '/generated/sources/proto/main/grpc')
         }
     }
 }
-configurations.all {
+configurations.configureEach {
     resolutionStrategy {
         dependencySubstitution {
             substitute module("com.google.protobuf:protobuf-javalite") using module("com.google.protobuf:protobuf-java:${protobufVersion}")
@@ -33,6 +33,8 @@ protobuf {
     }
 
     generateProtoTasks {
-        all()*.plugins { grpc {} }
+        all().configureEach { task ->
+            task.plugins{ grpc {} }
+        }
     }
 }

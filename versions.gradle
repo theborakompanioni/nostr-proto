@@ -1,14 +1,14 @@
 ext {
     jacksonJrVersion = '2.18.2'
-    grpcVersion = '1.69.0'
-    protobufVersion = '4.29.2'
+    grpcVersion = '1.75.0'
+    protobufVersion = '4.32.0'
     protocVersion = protobufVersion
     checkstyleVersion = '10.3.4'
     findsecbugsPluginVersion = '1.12.0'
-    nostrSpringBootStarterVersion = '0.1.0'
-    springBootGradlePluginVersion = '3.4.0'
+    nostrSpringBootStarterVersion = '0.4.0'
+    springBootGradlePluginVersion = '3.5.5'
     springBootVersion = springBootGradlePluginVersion
-    protobufGradleVersion = '0.9.4'
+    protobufGradleVersion = '0.9.5'
 }
 
 // hack: 2021-11-10T00:00Z - change this timestamp to invalidate GitHub Actions gradle caches.
