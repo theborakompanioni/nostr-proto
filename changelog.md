@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- add module jackson-datatype-nostr
+
 ## Changed
 - update grpc from v1.56.0 to v1.75.0
 - update jackson-jr-all from v2.16.1 to v2.20.0

@@ -2,3 +2,4 @@ rootProject.name = 'nostr-proto'
 
 include 'nostr-proto'
 include 'nostr-proto-json'
+include 'jackson-datatype-nostr'
