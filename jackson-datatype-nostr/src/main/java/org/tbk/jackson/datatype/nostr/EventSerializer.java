@@ -9,8 +9,8 @@ import org.tbk.nostr.proto.json.JsonWriter;
 import java.io.IOException;
 
 public class EventSerializer extends StdSerializer<Event> {
-    protected EventSerializer(Class<Event> t) {
-        super(t);
+    protected EventSerializer() {
+        super(Event.class);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.tbk.jackson.datatype.nostr;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jr.ob.JSON;
 import com.google.protobuf.ByteString;
@@ -56,4 +57,27 @@ class NostrModuleTest {
                 """));
     }
 
+    @Test
+    void itShouldDeserializeNostrEvent() throws JsonProcessingException {
+        Event event = MoreEvents.withEventId(Event.newBuilder()
+                        .setCreatedAt(1)
+                        .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
+                        .setKind(1)
+                        .setContent("GM"))
+                .build();
+
+        Event parsedEvent = objectMapper.readValue("""
+                {
+                  "id": "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                  "pubkey": "493557ea5445d54298010d895d964e286c5d8fd704ac03823c6ddb0317643cef",
+                  "created_at": 1,
+                  "kind": 1,
+                  "tags": [],
+                  "content": "GM",
+                  "sig": ""
+                }
+                """, Event.class);
+
+        assertThat(parsedEvent).isEqualTo(event);
+    }
 }
