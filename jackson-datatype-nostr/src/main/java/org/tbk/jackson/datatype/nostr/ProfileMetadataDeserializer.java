@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ProfileMetadataDeserializer extends StdDeserializer<ProfileMetadata> {
 
     protected ProfileMetadataDeserializer() {
-        super(Event.class);
+        super(ProfileMetadata.class);
     }
 
     @Override

@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.tbk.nostr.identity.Signer;
 import org.tbk.nostr.identity.SimpleSigner;
 import org.tbk.nostr.proto.Event;
+import org.tbk.nostr.proto.EventRequest;
 import org.tbk.nostr.proto.ProfileMetadata;
+import org.tbk.nostr.proto.Request;
 import org.tbk.nostr.util.MoreEvents;
 
 import java.io.IOException;
@@ -80,6 +82,68 @@ class NostrModuleTest {
                 """, Event.class);
 
         assertThat(parsedEvent).isEqualTo(event);
+    }
+
+    @Test
+    void itShouldSerializeNostrRequest() throws IOException {
+        Request request = Request.newBuilder()
+                .setEvent(EventRequest.newBuilder()
+                        .setEvent(MoreEvents.withEventId(Event.newBuilder()
+                                        .setCreatedAt(1)
+                                        .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
+                                        .setKind(1)
+                                        .setContent("GM"))
+                                .build())
+                        .build())
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        assertThat(JSON.std.anyFrom(json)).isEqualTo(JSON.std.anyFrom("""
+                [
+                  "EVENT",
+                  {
+                    "id" : "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                    "pubkey" : "493557ea5445d54298010d895d964e286c5d8fd704ac03823c6ddb0317643cef",
+                    "created_at" : 1,
+                    "kind" : 1,
+                    "tags" : [ ],
+                    "content" : "GM",
+                    "sig" : ""
+                  }
+                ]
+                """));
+    }
+
+    @Test
+    void itShouldDeserializeNostrRequest() throws JsonProcessingException {
+        Request request = Request.newBuilder()
+                .setEvent(EventRequest.newBuilder()
+                        .setEvent(MoreEvents.withEventId(Event.newBuilder()
+                                        .setCreatedAt(1)
+                                        .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
+                                        .setKind(1)
+                                        .setContent("GM"))
+                                .build())
+                        .build())
+                .build();
+
+        Request parsedRequest = objectMapper.readValue("""
+                [
+                  "EVENT",
+                  {
+                    "id" : "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                    "pubkey" : "493557ea5445d54298010d895d964e286c5d8fd704ac03823c6ddb0317643cef",
+                    "created_at" : 1,
+                    "kind" : 1,
+                    "tags" : [ ],
+                    "content" : "GM",
+                    "sig" : ""
+                  }
+                ]
+                """, Request.class);
+
+        assertThat(parsedRequest).isEqualTo(request);
     }
 
     @Test

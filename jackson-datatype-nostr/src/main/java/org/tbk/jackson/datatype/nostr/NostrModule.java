@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleDeserializers;
 import com.fasterxml.jackson.databind.module.SimpleSerializers;
 import org.tbk.nostr.proto.Event;
 import org.tbk.nostr.proto.ProfileMetadata;
+import org.tbk.nostr.proto.Request;
 
 public class NostrModule extends Module {
     @Override
@@ -22,11 +23,13 @@ public class NostrModule extends Module {
     public void setupModule(SetupContext context) {
         SimpleSerializers serializers = new SimpleSerializers();
         serializers.addSerializer(new EventSerializer());
+        serializers.addSerializer(new RequestSerializer());
         serializers.addSerializer(new ProfileMetadataSerializer());
         context.addSerializers(serializers);
 
         SimpleDeserializers deserializers = new SimpleDeserializers();
         deserializers.addDeserializer(Event.class, new EventDeserializer());
+        deserializers.addDeserializer(Request.class, new RequestDeserializer());
         deserializers.addDeserializer(ProfileMetadata.class, new ProfileMetadataDeserializer());
         context.addDeserializers(deserializers);
     }
