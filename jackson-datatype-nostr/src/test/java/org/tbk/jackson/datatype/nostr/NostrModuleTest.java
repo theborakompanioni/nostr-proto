@@ -9,10 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.tbk.nostr.identity.Signer;
 import org.tbk.nostr.identity.SimpleSigner;
-import org.tbk.nostr.proto.Event;
-import org.tbk.nostr.proto.EventRequest;
-import org.tbk.nostr.proto.ProfileMetadata;
-import org.tbk.nostr.proto.Request;
+import org.tbk.nostr.proto.*;
 import org.tbk.nostr.util.MoreEvents;
 
 import java.io.IOException;
@@ -144,6 +141,50 @@ class NostrModuleTest {
                 """, Request.class);
 
         assertThat(parsedRequest).isEqualTo(request);
+    }
+
+    @Test
+    void itShouldSerializeNostrResponse() throws IOException {
+        Response response = Response.newBuilder()
+                .setOk(OkResponse.newBuilder()
+                        .setEventId(ByteString.fromHex("40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e"))
+                        .setSuccess(true)
+                        .setMessage("test")
+                        .build())
+                .build();
+
+        String json = objectMapper.writeValueAsString(response);
+
+        assertThat(JSON.std.anyFrom(json)).isEqualTo(JSON.std.anyFrom("""
+                [
+                  "OK",
+                  "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                  true,
+                  "test"
+                ]
+                """));
+    }
+
+    @Test
+    void itShouldDeserializeNostrResponse() throws JsonProcessingException {
+        Response response = Response.newBuilder()
+                .setOk(OkResponse.newBuilder()
+                        .setEventId(ByteString.fromHex("40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e"))
+                        .setSuccess(true)
+                        .setMessage("test")
+                        .build())
+                .build();
+
+        Response parsedResponse = objectMapper.readValue("""
+                [
+                  "OK",
+                  "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                  true,
+                  "test"
+                ]
+                """, Response.class);
+
+        assertThat(parsedResponse).isEqualTo(response);
     }
 
     @Test

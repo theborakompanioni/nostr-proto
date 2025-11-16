@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - ProfileMetadata serializers
 - Request serializers
+- Response serializers
 
 
 ## [0.3.0] - 2025-09-07
