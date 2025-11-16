@@ -4,18 +4,19 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import org.tbk.nostr.proto.Event;
+import org.tbk.nostr.proto.ProfileMetadata;
 import org.tbk.nostr.proto.json.JsonReader;
 
 import java.io.IOException;
 
-public class EventDeserializer extends StdDeserializer<Event> {
+public class ProfileMetadataDeserializer extends StdDeserializer<ProfileMetadata> {
 
-    protected EventDeserializer() {
+    protected ProfileMetadataDeserializer() {
         super(Event.class);
     }
 
     @Override
-    public Event deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        return JsonReader.fromJson(p.readValueAsTree().toString(), Event.newBuilder());
+    public ProfileMetadata deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        return JsonReader.fromJson(p.readValueAsTree().toString(), ProfileMetadata.newBuilder());
     }
 }

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.tbk.nostr.identity.Signer;
 import org.tbk.nostr.identity.SimpleSigner;
 import org.tbk.nostr.proto.Event;
+import org.tbk.nostr.proto.ProfileMetadata;
 import org.tbk.nostr.util.MoreEvents;
 
 import java.io.IOException;
@@ -79,5 +80,43 @@ class NostrModuleTest {
                 """, Event.class);
 
         assertThat(parsedEvent).isEqualTo(event);
+    }
+
+    @Test
+    void itShouldSerializeNostrProfileMetadata() throws IOException {
+        ProfileMetadata profileMetadata = ProfileMetadata.newBuilder()
+                .setName("name")
+                .setDisplayName("displayName")
+                .setBot(true)
+                .build();
+
+        String json = objectMapper.writeValueAsString(profileMetadata);
+
+        assertThat(JSON.std.anyFrom(json)).isEqualTo(JSON.std.anyFrom("""
+                {
+                  "name": "name",
+                  "display_name": "displayName",
+                  "bot": true
+                }
+                """));
+    }
+
+    @Test
+    void itShouldDeserializeNostrProfileMetadata() throws JsonProcessingException {
+        ProfileMetadata profileMetadata = ProfileMetadata.newBuilder()
+                .setName("name")
+                .setDisplayName("displayName")
+                .setBot(true)
+                .build();
+
+        ProfileMetadata parsedProfileMetadata = objectMapper.readValue("""
+                {
+                  "name": "name",
+                  "display_name": "displayName",
+                  "bot": true
+                }
+                """, ProfileMetadata.class);
+
+        assertThat(parsedProfileMetadata).isEqualTo(profileMetadata);
     }
 }
