@@ -22,7 +22,7 @@ plugins {
     id 'nebula.lint' version '20.5.5'
     id 'com.netflix.nebula.project' version '11.0.0'
     id 'com.netflix.nebula.facet' version '11.0.0'
-    id 'com.github.spotbugs' version '5.2.1' apply false
+    id 'com.github.spotbugs' version '5.2.5' apply false
     id 'org.springframework.boot' version "$springBootGradlePluginVersion" apply false
 }
 
