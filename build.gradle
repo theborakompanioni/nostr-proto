@@ -22,7 +22,7 @@ plugins {
     id 'nebula.lint' version '20.6.2'
     id 'com.netflix.nebula.project' version '11.0.0'
     id 'com.netflix.nebula.facet' version '13.0.0'
-    id 'com.github.spotbugs' version '5.2.5' apply false
+    id 'com.github.spotbugs' version '6.4.8' apply false
     id 'org.springframework.boot' version "$springBootGradlePluginVersion" apply false
 }
 
@@ -216,7 +216,7 @@ subprojects {
 
     spotbugs {
         effort = Effort.MAX
-        reportLevel = Confidence.LOW
+        reportLevel = Confidence.valueOf("LOW") /* `Confidence.LOW` does not work; see https://github.com/spotbugs/spotbugs-gradle-plugin/issues/972 (last check on 2025-12-28)*/
         ignoreFailures = false
         excludeFilter = rootProject.file('./spotbugs-exclude.xml')
         reportsDir = rootProject.file("$rootProject.layout.buildDirectory/reports/spotbugs/$project.name")
