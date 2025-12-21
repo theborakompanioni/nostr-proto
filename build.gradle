@@ -96,9 +96,6 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_21.getMajorVersion())
         }
@@ -135,13 +132,13 @@ subprojects {
         exclude('**/mainnet/**')
         exclude('**/*.proto')
 
-        includeEmptyDirs false
+        includeEmptyDirs = false
     }
 
     sourcesJar {
         // needed till duplicate bug in protobuf gradle plugin is resolved.
         // see https://github.com/google/protobuf-gradle-plugin/issues/522 (last checked 2023-01-18)
-        duplicatesStrategy DuplicatesStrategy.EXCLUDE
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         archiveClassifier.set('sources')
         from sourceSets.main.java
@@ -191,10 +188,10 @@ subprojects {
         testLogging {
             // set options for log level LIFECYCLE
             events TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
-            showExceptions true
-            exceptionFormat TestExceptionFormat.FULL
-            showCauses true
-            showStackTraces true
+            showExceptions = true
+            exceptionFormat = TestExceptionFormat.FULL
+            showCauses = true
+            showStackTraces = true
 
             afterSuite { desc, result ->
                 if (!desc.parent) { // will match the outermost suite
