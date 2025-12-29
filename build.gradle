@@ -18,11 +18,11 @@ buildscript {
 
 plugins {
     id 'idea'
-    id 'nebula.release' version '19.0.10'
-    id 'nebula.lint' version '20.6.2'
+    id 'nebula.release' version '21.0.0'
+    id 'nebula.lint' version '21.1.3'
     id 'com.netflix.nebula.project' version '13.0.0'
     id 'com.netflix.nebula.facet' version '13.0.0'
-    id 'com.github.spotbugs' version '5.2.5' apply false
+    id 'com.github.spotbugs' version '6.4.8' apply false
     id 'org.springframework.boot' version "$springBootGradlePluginVersion" apply false
 }
 
@@ -69,13 +69,11 @@ allprojects {
 configure(rootProject) {
     defaultTasks 'clean', 'build', 'integrationTest'
 
-    task clean {
-        doLast {
-            delete fileTree("${rootProject.projectDir}") {
-                include '**/*.log'
-                include '**/*.log.*.gz'
-                include '**/*.log.*.tmp'
-            }
+    tasks.register('clean', Delete) {
+        delete fileTree("${rootProject.projectDir}") {
+            include '**/*.log'
+            include '**/*.log.*.gz'
+            include '**/*.log.*.tmp'
         }
     }
 }
@@ -96,9 +94,6 @@ subprojects {
     java {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(JavaVersion.VERSION_21.getMajorVersion())
         }
@@ -135,13 +130,13 @@ subprojects {
         exclude('**/mainnet/**')
         exclude('**/*.proto')
 
-        includeEmptyDirs false
+        includeEmptyDirs = false
     }
 
     sourcesJar {
         // needed till duplicate bug in protobuf gradle plugin is resolved.
         // see https://github.com/google/protobuf-gradle-plugin/issues/522 (last checked 2023-01-18)
-        duplicatesStrategy DuplicatesStrategy.EXCLUDE
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         archiveClassifier.set('sources')
         from sourceSets.main.java
@@ -191,10 +186,10 @@ subprojects {
         testLogging {
             // set options for log level LIFECYCLE
             events TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
-            showExceptions true
-            exceptionFormat TestExceptionFormat.FULL
-            showCauses true
-            showStackTraces true
+            showExceptions = true
+            exceptionFormat = TestExceptionFormat.FULL
+            showCauses = true
+            showStackTraces = true
 
             afterSuite { desc, result ->
                 if (!desc.parent) { // will match the outermost suite
@@ -216,7 +211,7 @@ subprojects {
 
     spotbugs {
         effort = Effort.MAX
-        reportLevel = Confidence.LOW
+        reportLevel = Confidence.valueOf("LOW") /* `Confidence.LOW` does not work; see https://github.com/spotbugs/spotbugs-gradle-plugin/issues/972 (last check on 2025-12-28)*/
         ignoreFailures = false
         excludeFilter = rootProject.file('./spotbugs-exclude.xml')
         reportsDir = rootProject.file("$rootProject.layout.buildDirectory/reports/spotbugs/$project.name")
