@@ -69,13 +69,11 @@ allprojects {
 configure(rootProject) {
     defaultTasks 'clean', 'build', 'integrationTest'
 
-    task clean {
-        doLast {
-            delete fileTree("${rootProject.projectDir}") {
-                include '**/*.log'
-                include '**/*.log.*.gz'
-                include '**/*.log.*.tmp'
-            }
+    tasks.register('clean', Delete) {
+        delete fileTree("${rootProject.projectDir}") {
+            include '**/*.log'
+            include '**/*.log.*.gz'
+            include '**/*.log.*.tmp'
         }
     }
 }
