@@ -13,8 +13,8 @@ jreleaser {
         github {
             enabled = true
             commitAuthor {
-                name = "theborakompanioni"
-                email = "theborakompanioni+github@gmail.com"
+                name = 'theborakompanioni'
+                email = 'theborakompanioni+github@gmail.com'
             }
             prerelease {
                 enabled = true
@@ -23,6 +23,7 @@ jreleaser {
             overwrite = false
         }
     }
+
     deploy {
         maven {
             mavenCentral {
@@ -31,18 +32,6 @@ jreleaser {
                     url = 'https://central.sonatype.com/api/v1/publisher'
                     stagingRepository(layout.buildDirectory.dir('staging-deploy').get().toString())
                     sign = false // done with nebula
-                }
-            }
-            nexus2 {
-                'snapshot-deploy' {
-                    active = 'SNAPSHOT'
-                    snapshotUrl = 'https://central.sonatype.com/repository/maven-snapshots/'
-                    applyMavenCentralRules = true
-                    sign = false // done with nebula
-                    snapshotSupported = true
-                    closeRepository = true
-                    releaseRepository = true
-                    stagingRepository(layout.buildDirectory.dir('staging-deploy').get().toString())
                 }
             }
         }

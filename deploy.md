@@ -2,6 +2,7 @@
 # Deployment
 
 ### Maven Central
+Publish all modules to Maven Central (notice params `signing.password`):
 ```sh
 ./gradlew --no-parallel \
     clean assemble -PjavadocEnabled \
@@ -10,7 +11,7 @@
     jreleaserDeploy -Prelease.version=1.0.0-SNAPSHOT
 ```
 
-e.g. publishing an individual module to Maven Central (notice params `signing.password` and `ossrhPassword`):
+Publish an individual module to Maven Central:
 ```sh
 ./gradlew -p nostr/nostr-base \
     --no-parallel \
@@ -21,7 +22,7 @@ e.g. publishing an individual module to Maven Central (notice params `signing.pa
 ```
 
 In your local `~/.jreleaser/config.properties` you need
-```
+```properties
 JRELEASER_MAVENCENTRAL_USERNAME=<YOUR_USERNAME>
 JRELEASER_MAVENCENTRAL_TOKEN=<YOUR_TOKEN>
 
