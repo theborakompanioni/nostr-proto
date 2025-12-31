@@ -4,7 +4,7 @@ ext {
     grpcVersion = '1.78.0'
     protobufVersion = '4.33.2'
     protocVersion = protobufVersion
-    checkstyleVersion = '12.3.0'
+    checkstyleVersion = '12.3.1'
     findsecbugsPluginVersion = '1.14.0'
     nostrSpringBootStarterVersion = '0.4.0'
     springBootGradlePluginVersion = '4.0.1'
