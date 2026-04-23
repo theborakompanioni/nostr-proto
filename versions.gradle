@@ -1,8 +1,13 @@
 ext {
     jacksonVersion = '2.21.2'
     jacksonJrVersion = jacksonVersion
+<<<<<<< renovate/grpc-java-monorepo
+    grpcVersion = '1.80.0'
+    protobufVersion = '4.33.2'
+=======
     grpcVersion = '1.79.0'
     protobufVersion = '4.34.1'
+>>>>>>> master
     protocVersion = protobufVersion
     checkstyleVersion = '13.4.0'
     findsecbugsPluginVersion = '1.14.0'
