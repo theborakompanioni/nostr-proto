@@ -30,7 +30,7 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v5
         with:
-          java-version: ${{ matrix.java-version-file }}
+          java-version-file: ${{ matrix.java-version-file }}
 
       - name: Print Java Version
         run: java --version

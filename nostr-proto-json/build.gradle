@@ -7,13 +7,13 @@ description = 'nostr proto json package'
 dependencies {
     api project(':nostr-proto')
 
-    implementation "com.fasterxml.jackson.jr:jackson-jr-all:${jacksonJrVersion}"
+    implementation "com.fasterxml.jackson.jr:jackson-jr-all:${rootProject.ext.jacksonJrVersion}"
 
-    testImplementation ("io.github.theborakompanioni:nostr-core:${nostrSpringBootStarterVersion}") {
+    testImplementation ("io.github.theborakompanioni:nostr-core:${rootProject.ext.nostrSpringBootStarterVersion}") {
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto-json'
     }
-    testImplementation ("io.github.theborakompanioni:nostr-identity:${nostrSpringBootStarterVersion}") {
+    testImplementation ("io.github.theborakompanioni:nostr-identity:${rootProject.ext.nostrSpringBootStarterVersion}") {
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto-json'
     }
