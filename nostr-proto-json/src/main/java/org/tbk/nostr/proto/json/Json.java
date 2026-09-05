@@ -1,8 +1,5 @@
 package org.tbk.nostr.proto.json;
 
-import com.fasterxml.jackson.jr.ob.JSON;
-import com.fasterxml.jackson.jr.ob.JSONComposer;
-import com.fasterxml.jackson.jr.ob.comp.ArrayComposer;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.Descriptors.FieldDescriptor;
@@ -10,8 +7,10 @@ import org.tbk.nostr.proto.Event;
 import org.tbk.nostr.proto.Filter;
 import org.tbk.nostr.proto.TagFilter;
 import org.tbk.nostr.proto.TagValue;
+import tools.jackson.jr.ob.JSON;
+import tools.jackson.jr.ob.JSONComposer;
+import tools.jackson.jr.ob.comp.ArrayComposer;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -288,18 +287,14 @@ final class Json {
 
 
     static String toJsonArray(JSON json, String... values) {
-        try {
-            ArrayComposer<JSONComposer<String>> arrayComposer = json
-                    .composeString()
-                    .startArray();
+        ArrayComposer<JSONComposer<String>> arrayComposer = json
+                .composeString()
+                .startArray();
 
-            for (String it : values) {
-                arrayComposer.add(it);
-            }
-
-            return arrayComposer.end().finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        for (String it : values) {
+            arrayComposer.add(it);
         }
+
+        return arrayComposer.end().finish();
     }
 }

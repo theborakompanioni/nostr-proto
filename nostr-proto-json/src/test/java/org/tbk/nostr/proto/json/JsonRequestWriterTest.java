@@ -1,6 +1,5 @@
 package org.tbk.nostr.proto.json;
 
-import com.fasterxml.jackson.jr.ob.JSON;
 import com.google.protobuf.ByteString;
 import org.junit.jupiter.api.Test;
 import org.tbk.nostr.base.IndexedTag;
@@ -10,8 +9,8 @@ import org.tbk.nostr.identity.SimpleSigner;
 import org.tbk.nostr.proto.*;
 import org.tbk.nostr.util.MoreEvents;
 import org.tbk.nostr.util.MoreTags;
+import tools.jackson.jr.ob.JSON;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
 import java.util.HexFormat;
@@ -24,7 +23,7 @@ class JsonRequestWriterTest {
     private static final Signer testSigner = SimpleSigner.fromPrivateKeyHex("958c7ed568943914f3763e1034883710d8d33eb2ad20b41b0db7babff50a238e");
 
     @Test
-    void itShouldWriteEventRequest0() throws IOException {
+    void itShouldWriteEventRequest0() {
         String json = JsonRequestWriter.toJson(Request.newBuilder()
                 .setEvent(EventRequest.newBuilder()
                         .setEvent(MoreEvents.withEventId(Event.newBuilder()
@@ -53,7 +52,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteEventRequest1() throws IOException {
+    void itShouldWriteEventRequest1() {
         Event event = MoreEvents.finalize(testSigner, Event.newBuilder()
                 .setCreatedAt(1)
                 .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
@@ -84,7 +83,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteReqRequest0() throws IOException {
+    void itShouldWriteReqRequest0() {
         String json = JsonRequestWriter.toJson(Request.newBuilder()
                 .setReq(ReqRequest.newBuilder()
                         .setId("subscription_id")
@@ -106,7 +105,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteReqRequest1() throws IOException {
+    void itShouldWriteReqRequest1() {
         String json = JsonRequestWriter.toJson(Request.newBuilder()
                 .setReq(ReqRequest.newBuilder()
                         .setId("subscription_id")
@@ -130,7 +129,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteReqRequest2SkipUnnecessaryValues() throws IOException {
+    void itShouldWriteReqRequest2SkipUnnecessaryValues() {
         String json = JsonRequestWriter.toJson(Request.newBuilder()
                 .setReq(ReqRequest.newBuilder()
                         .setId("subscription_id")
@@ -161,7 +160,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteReqRequest3() throws IOException {
+    void itShouldWriteReqRequest3() {
         String json = JsonRequestWriter.toJson(Request.newBuilder()
                 .setReq(ReqRequest.newBuilder()
                         .setId("subscription_id")
@@ -233,7 +232,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteCloseRequest0() throws IOException {
+    void itShouldWriteCloseRequest0() {
         String json = JsonRequestWriter.toJson(Request.newBuilder()
                 .setClose(CloseRequest.newBuilder()
                         .setId("subscription_id")
@@ -249,7 +248,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteCountRequest0() throws IOException {
+    void itShouldWriteCountRequest0() {
         String json = JsonRequestWriter.toJson(Request.newBuilder()
                 .setCount(CountRequest.newBuilder()
                         .setId("subscription_id")
@@ -271,7 +270,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteAuthRequest0() throws IOException {
+    void itShouldWriteAuthRequest0() {
         String json = JsonRequestWriter.toJson(Request.newBuilder()
                 .setAuth(AuthRequest.newBuilder()
                         .setEvent(MoreEvents.withEventId(Event.newBuilder()
@@ -305,7 +304,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteEvent0() throws IOException {
+    void itShouldWriteEvent0() {
         String json = JsonRequestWriter.toJson(MoreEvents.withEventId(Event.newBuilder()
                         .setCreatedAt(1)
                         .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
@@ -327,7 +326,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteEvent1() throws IOException {
+    void itShouldWriteEvent1() {
         Event.Builder partialEvent = MoreEvents.withEventId(Event.newBuilder()
                 .setCreatedAt(1)
                 .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
@@ -359,7 +358,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteEvent2WithMultipleDuplicateTags() throws IOException {
+    void itShouldWriteEvent2WithMultipleDuplicateTags() {
         Event.Builder partialEvent = MoreEvents.withEventId(Event.newBuilder()
                 .setCreatedAt(1)
                 .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
@@ -395,7 +394,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteFilter0() throws IOException {
+    void itShouldWriteFilter0() {
         String json = JsonRequestWriter.toJson(Filter.newBuilder()
                 .addIds(ByteString.fromHex("5c83da77af1dec6d7289834998ad7aafbd9e2191396d75ec3cc27f5a77226f36"))
                 .build());
@@ -408,7 +407,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteFilter1() throws IOException {
+    void itShouldWriteFilter1() {
         String json = JsonRequestWriter.toJson(Filter.newBuilder()
                 .addAuthors(ByteString.fromHex("f7234bd4c1394dda46d09f35bd384dd30cc552ad5541990f98844fb06676e9ca"))
                 .build());
@@ -421,7 +420,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteFilter2() throws IOException {
+    void itShouldWriteFilter2() {
         String json = JsonRequestWriter.toJson(Filter.newBuilder()
                 .setSince(1)
                 .setUntil(21)
@@ -442,14 +441,14 @@ class JsonRequestWriterTest {
      * Currently, it is safe to assume, users know what they are doing.
      */
     @Test
-    void itShouldWriteFilter3Empty() throws IOException {
+    void itShouldWriteFilter3Empty() {
         String json = JsonRequestWriter.toJson(Filter.newBuilder().build());
 
         assertThat(JSON.std.anyFrom(json), is(JSON.std.anyFrom("{}")));
     }
 
     @Test
-    void itShouldWriteFilter4() throws IOException {
+    void itShouldWriteFilter4() {
         String json = JsonRequestWriter.toJson(Filter.newBuilder()
                 .addTags(MoreTags.filter(MoreTags.e("5c83da77af1dec6d7289834998ad7aafbd9e2191396d75ec3cc27f5a77226f36")))
                 .addTags(MoreTags.filter(MoreTags.p("f7234bd4c1394dda46d09f35bd384dd30cc552ad5541990f98844fb06676e9ca")))
@@ -470,7 +469,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteFilter5() throws IOException {
+    void itShouldWriteFilter5() {
         String json = JsonRequestWriter.toJson(Filter.newBuilder()
                 .addTags(MoreTags.filter(IndexedTag.e, "e0", "e1"))
                 .addTags(MoreTags.filter(IndexedTag.e, "e2"))
@@ -490,7 +489,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteMetadata0() throws IOException {
+    void itShouldWriteMetadata0() {
         String json = JsonRequestWriter.toJson(ProfileMetadata.newBuilder()
                 .setName("name")
                 .setAbout("about")
@@ -507,7 +506,7 @@ class JsonRequestWriterTest {
     }
 
     @Test
-    void itShouldWriteMetadata1() throws IOException {
+    void itShouldWriteMetadata1() {
         String json = JsonRequestWriter.toJson(ProfileMetadata.newBuilder()
                 .setName("name")
                 .setAbout("about")

@@ -3,7 +3,6 @@ package org.tbk.nostr.proto.json;
 import com.google.protobuf.Descriptors;
 import org.tbk.nostr.proto.*;
 
-import java.io.IOException;
 import java.util.HexFormat;
 
 import static org.tbk.nostr.proto.json.Json.json;
@@ -28,34 +27,27 @@ final class JsonResponseWriter {
     }
 
     private static String toJson(EventResponse val) {
-        try {
-            return json
-                    .composeString()
-                    .startArray()
-                    .add("EVENT")
-                    .add(val.getSubscriptionId())
-                    .addObject(Json.asMap(val.getEvent()))
-                    .end()
-                    .finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return json
+                .composeString()
+                .startArray()
+                .add("EVENT")
+                .add(val.getSubscriptionId())
+                .addPOJO(Json.asMap(val.getEvent()))
+                .end()
+                .finish();
     }
 
     private static String toJson(OkResponse val) {
-        try {
-            return json
-                    .composeString()
-                    .startArray()
-                    .add("OK")
-                    .add(HexFormat.of().formatHex(val.getEventId().toByteArray()))
-                    .add(val.getSuccess())
-                    .add(val.getMessage())
-                    .end()
-                    .finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return json
+                .composeString()
+                .startArray()
+                .add("OK")
+                .add(HexFormat.of().formatHex(val.getEventId().toByteArray()))
+                .add(val.getSuccess())
+                .add(val.getMessage())
+                .end()
+                .finish();
+
     }
 
     private static String toJson(EoseResponse val) {
@@ -75,21 +67,17 @@ final class JsonResponseWriter {
         Descriptors.FieldDescriptor countField = descriptor.findFieldByNumber(CountResult.COUNT_FIELD_NUMBER);
         Descriptors.FieldDescriptor approximateField = descriptor.findFieldByNumber(CountResult.APPROXIMATE_FIELD_NUMBER);
 
-        try {
-            return json
-                    .composeString()
-                    .startArray()
-                    .add("COUNT")
-                    .add(val.getSubscriptionId())
-                    .startObject()
-                    .put(countField.getJsonName(), val.getResult().getCount())
-                    .put(approximateField.getJsonName(), val.getResult().getApproximate())
-                    .end()
-                    .end()
-                    .finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return json
+                .composeString()
+                .startArray()
+                .add("COUNT")
+                .add(val.getSubscriptionId())
+                .startObject()
+                .put(countField.getJsonName(), val.getResult().getCount())
+                .put(approximateField.getJsonName(), val.getResult().getApproximate())
+                .end()
+                .end()
+                .finish();
     }
 
     private static String toJson(AuthResponse val) {

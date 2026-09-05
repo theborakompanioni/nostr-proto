@@ -5,7 +5,6 @@
 biz.aQute.bnd:biz.aQute.bnd.annotation:7.1.0=e2eTestCompileClasspath,integTestCompileClasspath,testCompileClasspath
 ch.qos.logback:logback-classic:1.5.32=e2eTestCompileClasspath,e2eTestRuntimeClasspath,integTestCompileClasspath,integTestRuntimeClasspath,testCompileClasspath,testRuntimeClasspath
 ch.qos.logback:logback-core:1.5.32=e2eTestCompileClasspath,e2eTestRuntimeClasspath,integTestCompileClasspath,integTestRuntimeClasspath,testCompileClasspath,testRuntimeClasspath
-com.fasterxml.jackson.jr:jackson-jr-all:2.22.2=compileClasspath,e2eTestCompileClasspath,e2eTestRuntimeClasspath,integTestCompileClasspath,integTestRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 com.github.spotbugs:spotbugs-annotations:4.10.4=compileClasspath,e2eTestCompileClasspath,integTestCompileClasspath,spotbugs,testCompileClasspath
 com.github.spotbugs:spotbugs:4.10.4=spotbugs
 com.github.stephenc.jcip:jcip-annotations:1.0-1=spotbugs
@@ -123,4 +122,5 @@ org.springframework:spring-test:7.0.7=e2eTestCompileClasspath,e2eTestRuntimeClas
 org.xmlresolver:xmlresolver:5.3.3=checkstyle,spotbugs
 org.xmlunit:xmlunit-core:2.10.4=e2eTestCompileClasspath,e2eTestRuntimeClasspath,integTestCompileClasspath,integTestRuntimeClasspath,testCompileClasspath,testRuntimeClasspath
 org.yaml:snakeyaml:2.5=e2eTestCompileClasspath,e2eTestRuntimeClasspath,integTestCompileClasspath,integTestRuntimeClasspath,testCompileClasspath,testRuntimeClasspath
+tools.jackson.jr:jackson-jr-all:3.2.2=compileClasspath,e2eTestCompileClasspath,e2eTestRuntimeClasspath,integTestCompileClasspath,integTestRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 empty=annotationProcessor,e2eTestAnnotationProcessor,integTestAnnotationProcessor,testAnnotationProcessor

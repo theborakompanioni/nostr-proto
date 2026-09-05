@@ -1,12 +1,11 @@
 package org.tbk.nostr.proto.json;
 
-import com.fasterxml.jackson.jr.ob.JSONComposer;
-import com.fasterxml.jackson.jr.ob.comp.ArrayComposer;
-import com.fasterxml.jackson.jr.ob.comp.ObjectComposer;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import org.tbk.nostr.proto.*;
+import tools.jackson.jr.ob.JSONComposer;
+import tools.jackson.jr.ob.comp.ArrayComposer;
+import tools.jackson.jr.ob.comp.ObjectComposer;
 
-import java.io.IOException;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
@@ -32,19 +31,15 @@ final class JsonRequestWriter {
     }
 
     static String toJson(ProfileMetadata val) {
-        try {
-            ObjectComposer<JSONComposer<String>> builder = json
-                    .composeString()
-                    .startObject();
+        ObjectComposer<JSONComposer<String>> builder = json
+                .composeString()
+                .startObject();
 
-            Map<FieldDescriptor, Object> allFields = val.getAllFields();
-            for (Map.Entry<FieldDescriptor, Object> entry : allFields.entrySet()) {
-                builder.putObject(entry.getKey().getJsonName(), entry.getValue());
-            }
-            return builder.end().finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        Map<FieldDescriptor, Object> allFields = val.getAllFields();
+        for (Map.Entry<FieldDescriptor, Object> entry : allFields.entrySet()) {
+            builder.putObject(entry.getKey().getJsonName(), entry.getValue());
         }
+        return builder.end().finish();
     }
 
     /**
@@ -62,34 +57,26 @@ final class JsonRequestWriter {
      * </code>
      */
     static String toJsonForSigning(EventOrBuilder e) {
-        try {
-            return jsonForSigning.composeString()
-                    .startArray()
-                    .add(0)
-                    .add(HexFormat.of().formatHex(e.getPubkey().toByteArray()))
-                    .add(e.getCreatedAt())
-                    .add(e.getKind())
-                    .addObject(Json.listFromTags(e.getTagsList()))
-                    .add(e.getContent())
-                    .end()
-                    .finish();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        return jsonForSigning.composeString()
+                .startArray()
+                .add(0)
+                .add(HexFormat.of().formatHex(e.getPubkey().toByteArray()))
+                .add(e.getCreatedAt())
+                .add(e.getKind())
+                .addPOJO(Json.listFromTags(e.getTagsList()))
+                .add(e.getContent())
+                .end()
+                .finish();
     }
 
     private static String toJson(CloseRequest val) {
-        try {
-            return json
-                    .composeString()
-                    .startArray()
-                    .add("CLOSE")
-                    .add(val.getId())
-                    .end()
-                    .finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return json
+                .composeString()
+                .startArray()
+                .add("CLOSE")
+                .add(val.getId())
+                .end()
+                .finish();
     }
 
     private static String toJson(EventRequest val) {
@@ -109,34 +96,26 @@ final class JsonRequestWriter {
     }
 
     private static String toJsonWithEvent(String cmd, Event event) {
-        try {
-            return json
-                    .composeString()
-                    .startArray()
-                    .add(cmd)
-                    .addObject(Json.asMap(event))
-                    .end()
-                    .finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return json
+                .composeString()
+                .startArray()
+                .add(cmd)
+                .addPOJO(Json.asMap(event))
+                .end()
+                .finish();
     }
 
     private static String toJsonWithSubscriptionIdAndFilter(String cmd, String subscriptionId, List<Filter> filters) {
-        try {
-            ArrayComposer<JSONComposer<String>> arrayComposer = json
-                    .composeString()
-                    .startArray()
-                    .add(cmd)
-                    .add(subscriptionId);
+        ArrayComposer<JSONComposer<String>> arrayComposer = json
+                .composeString()
+                .startArray()
+                .add(cmd)
+                .add(subscriptionId);
 
-            for (Filter it : filters) {
-                arrayComposer.addObject(Json.asMap(it));
-            }
-            return arrayComposer.end().finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        for (Filter it : filters) {
+            arrayComposer.addPOJO(Json.asMap(it));
         }
+        return arrayComposer.end().finish();
     }
 
     /**
@@ -145,19 +124,11 @@ final class JsonRequestWriter {
      */
     // @VisibleForTesting
     static String toJson(Event event) {
-        try {
-            return json.asString(Json.asMap(event));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return json.asString(Json.asMap(event));
     }
 
     // @VisibleForTesting
     static String toJson(Filter filter) {
-        try {
-            return json.asString(Json.asMap(filter));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return json.asString(Json.asMap(filter));
     }
 }
