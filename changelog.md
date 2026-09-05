@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Breaking
+- update jackson-jr-all to v3.2.2
+- update jackson-databind to v3.2.2
+
 ## [0.4.0] - 2025-12-29
 ### Added
 - ProfileMetadata serializers

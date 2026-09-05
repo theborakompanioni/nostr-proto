@@ -1,14 +1,12 @@
 package org.tbk.nostr.proto.json;
 
-import com.fasterxml.jackson.jr.ob.JSON;
 import com.google.protobuf.ByteString;
 import org.junit.jupiter.api.Test;
 import org.tbk.nostr.identity.Signer;
 import org.tbk.nostr.identity.SimpleSigner;
 import org.tbk.nostr.proto.*;
 import org.tbk.nostr.util.MoreEvents;
-
-import java.io.IOException;
+import tools.jackson.jr.ob.JSON;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -17,7 +15,7 @@ class JsonResponseWriterTest {
     private static final Signer testSigner = SimpleSigner.fromPrivateKeyHex("958c7ed568943914f3763e1034883710d8d33eb2ad20b41b0db7babff50a238e");
 
     @Test
-    void itShouldWriteNoticeResponse0() throws IOException {
+    void itShouldWriteNoticeResponse0() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setNotice(NoticeResponse.newBuilder()
                         .setMessage("test")
@@ -33,7 +31,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteNoticeResponse1() throws IOException {
+    void itShouldWriteNoticeResponse1() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setNotice(NoticeResponse.newBuilder().build())
                 .build());
@@ -47,7 +45,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteClosedResponse0() throws IOException {
+    void itShouldWriteClosedResponse0() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setClosed(ClosedResponse.newBuilder()
                         .setSubscriptionId("subscription_id")
@@ -65,7 +63,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteClosedResponse1() throws IOException {
+    void itShouldWriteClosedResponse1() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setClosed(ClosedResponse.newBuilder()
                         .setSubscriptionId("subscription_id")
@@ -82,7 +80,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteEventResponse() throws IOException {
+    void itShouldWriteEventResponse() {
         Event.Builder partialEvent = MoreEvents.withEventId(Event.newBuilder()
                 .setCreatedAt(1)
                 .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
@@ -114,7 +112,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteCountResponse0() throws IOException {
+    void itShouldWriteCountResponse0() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setCount(CountResponse.newBuilder()
                         .setSubscriptionId("subscription_id")
@@ -138,7 +136,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteEoseResponse0() throws IOException {
+    void itShouldWriteEoseResponse0() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setEose(EoseResponse.newBuilder()
                         .setSubscriptionId("subscription_id")
@@ -154,7 +152,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteOkResponse0() throws IOException {
+    void itShouldWriteOkResponse0() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setOk(OkResponse.newBuilder()
                         .setEventId(ByteString.fromHex("40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e"))
@@ -174,7 +172,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteOkResponse1() throws IOException {
+    void itShouldWriteOkResponse1() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setOk(OkResponse.newBuilder()
                         .setEventId(ByteString.fromHex("40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e"))
@@ -193,7 +191,7 @@ class JsonResponseWriterTest {
     }
 
     @Test
-    void itShouldWriteAuthResponse0() throws IOException {
+    void itShouldWriteAuthResponse0() {
         String json = JsonWriter.toJson(Response.newBuilder()
                 .setAuth(AuthResponse.newBuilder()
                         .setChallenge("challenge")

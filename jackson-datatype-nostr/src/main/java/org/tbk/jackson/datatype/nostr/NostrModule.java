@@ -1,15 +1,16 @@
 package org.tbk.jackson.datatype.nostr;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleDeserializers;
-import com.fasterxml.jackson.databind.module.SimpleSerializers;
+
 import org.tbk.nostr.proto.Event;
 import org.tbk.nostr.proto.ProfileMetadata;
 import org.tbk.nostr.proto.Request;
 import org.tbk.nostr.proto.Response;
+import tools.jackson.core.Version;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.module.SimpleDeserializers;
+import tools.jackson.databind.module.SimpleSerializers;
 
-public class NostrModule extends Module {
+public class NostrModule extends JacksonModule {
     @Override
     public String getModuleName() {
         return "NostrModule";

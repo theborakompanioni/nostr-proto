@@ -7,7 +7,7 @@ description = 'nostr proto json package'
 dependencies {
     api project(':nostr-proto')
 
-    implementation "com.fasterxml.jackson.jr:jackson-jr-all:${rootProject.ext.jacksonJrVersion}"
+    implementation "tools.jackson.jr:jackson-jr-all:${rootProject.ext.jacksonJr3Version}"
 
     testImplementation ("io.github.theborakompanioni:nostr-core:${rootProject.ext.nostrSpringBootStarterVersion}") {
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'

@@ -1,12 +1,11 @@
 package org.tbk.jackson.datatype.nostr;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.tbk.nostr.proto.ProfileMetadata;
 import org.tbk.nostr.proto.json.JsonWriter;
-
-import java.io.IOException;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 public class ProfileMetadataSerializer extends StdSerializer<ProfileMetadata> {
 
@@ -15,7 +14,7 @@ public class ProfileMetadataSerializer extends StdSerializer<ProfileMetadata> {
     }
 
     @Override
-    public void serialize(ProfileMetadata value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(ProfileMetadata value, JsonGenerator jsonGenerator, SerializationContext ctxt) throws JacksonException {
         jsonGenerator.writeRawValue(JsonWriter.toJson(value));
     }
 }

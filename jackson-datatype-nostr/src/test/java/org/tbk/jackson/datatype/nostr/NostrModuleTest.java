@@ -1,16 +1,16 @@
 package org.tbk.jackson.datatype.nostr;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.jr.ob.JSON;
 import com.google.protobuf.ByteString;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.tbk.nostr.identity.Signer;
 import org.tbk.nostr.identity.SimpleSigner;
 import org.tbk.nostr.proto.*;
 import org.tbk.nostr.util.MoreEvents;
+import tools.jackson.databind.JacksonModule;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.jr.ob.JSON;
 
 import java.io.IOException;
 
@@ -19,18 +19,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 class NostrModuleTest {
     private static final Signer testSigner = SimpleSigner.fromPrivateKeyHex("958c7ed568943914f3763e1034883710d8d33eb2ad20b41b0db7babff50a238e");
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    @BeforeAll
-    public static void setUp() {
-        objectMapper.registerModule(new NostrModule());
-    }
+    private static final ObjectMapper objectMapper = JsonMapper.builder()
+            .addModule(new NostrModule())
+            .build();
 
     @Test
     void itShouldRegisterModuleCorrectly() {
-        Assertions
-                .assertThatCollection(objectMapper.getRegisteredModuleIds())
+        Assertions.assertThatCollection(objectMapper.registeredModules().stream()
+                        .map(it -> it.getClass().getName())
+                        .toList())
                 .contains("org.tbk.jackson.datatype.nostr.NostrModule");
+
+        Assertions.assertThatCollection(objectMapper.registeredModules().stream()
+                        .map(JacksonModule::getModuleName)
+                        .toList())
+                .contains("NostrModule");
     }
 
     @Test
@@ -58,7 +61,7 @@ class NostrModuleTest {
     }
 
     @Test
-    void itShouldDeserializeNostrEvent() throws JsonProcessingException {
+    void itShouldDeserializeNostrEvent() {
         Event event = MoreEvents.withEventId(Event.newBuilder()
                         .setCreatedAt(1)
                         .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
@@ -82,7 +85,7 @@ class NostrModuleTest {
     }
 
     @Test
-    void itShouldSerializeNostrRequest() throws IOException {
+    void itShouldSerializeNostrRequest() {
         Request request = Request.newBuilder()
                 .setEvent(EventRequest.newBuilder()
                         .setEvent(MoreEvents.withEventId(Event.newBuilder()
@@ -113,7 +116,7 @@ class NostrModuleTest {
     }
 
     @Test
-    void itShouldDeserializeNostrRequest() throws JsonProcessingException {
+    void itShouldDeserializeNostrRequest() {
         Request request = Request.newBuilder()
                 .setEvent(EventRequest.newBuilder()
                         .setEvent(MoreEvents.withEventId(Event.newBuilder()
@@ -144,7 +147,7 @@ class NostrModuleTest {
     }
 
     @Test
-    void itShouldSerializeNostrResponse() throws IOException {
+    void itShouldSerializeNostrResponse() {
         Response response = Response.newBuilder()
                 .setOk(OkResponse.newBuilder()
                         .setEventId(ByteString.fromHex("40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e"))
@@ -166,7 +169,7 @@ class NostrModuleTest {
     }
 
     @Test
-    void itShouldDeserializeNostrResponse() throws JsonProcessingException {
+    void itShouldDeserializeNostrResponse() {
         Response response = Response.newBuilder()
                 .setOk(OkResponse.newBuilder()
                         .setEventId(ByteString.fromHex("40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e"))
@@ -188,7 +191,7 @@ class NostrModuleTest {
     }
 
     @Test
-    void itShouldSerializeNostrProfileMetadata() throws IOException {
+    void itShouldSerializeNostrProfileMetadata() {
         ProfileMetadata profileMetadata = ProfileMetadata.newBuilder()
                 .setName("name")
                 .setDisplayName("displayName")
@@ -207,7 +210,7 @@ class NostrModuleTest {
     }
 
     @Test
-    void itShouldDeserializeNostrProfileMetadata() throws JsonProcessingException {
+    void itShouldDeserializeNostrProfileMetadata() {
         ProfileMetadata profileMetadata = ProfileMetadata.newBuilder()
                 .setName("name")
                 .setDisplayName("displayName")

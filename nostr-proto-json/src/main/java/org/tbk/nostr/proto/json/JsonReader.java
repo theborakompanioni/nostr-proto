@@ -5,8 +5,6 @@ import org.tbk.nostr.proto.ProfileMetadata;
 import org.tbk.nostr.proto.Request;
 import org.tbk.nostr.proto.Response;
 
-import java.io.IOException;
-
 import static org.tbk.nostr.proto.json.Json.json;
 
 public final class JsonReader {
@@ -28,18 +26,10 @@ public final class JsonReader {
     }
 
     public static Event fromJson(String val, Event.Builder event) {
-        try {
-            return Json.fromMap(json.mapFrom(val), event);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Json.fromMap(json.mapFrom(val), event);
     }
 
     public static Event.Builder fromJsonPartial(String val, Event.Builder event) {
-        try {
-            return Json.fromMapPartial(json.mapFrom(val), event);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Json.fromMapPartial(json.mapFrom(val), event);
     }
 }

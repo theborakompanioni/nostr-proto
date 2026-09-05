@@ -7,9 +7,9 @@ description = 'Support for datatypes of nostr-proto library'
 dependencies {
     implementation project(':nostr-proto-json')
 
-    implementation "com.fasterxml.jackson.core:jackson-databind:${rootProject.ext.jacksonVersion}"
+    implementation "tools.jackson.core:jackson-databind:${rootProject.ext.jackson3Version}"
 
-    testImplementation "com.fasterxml.jackson.jr:jackson-jr-all:${rootProject.ext.jacksonJrVersion}"
+    testImplementation "tools.jackson.jr:jackson-jr-all:${rootProject.ext.jacksonJr3Version}"
 
     testImplementation("io.github.theborakompanioni:nostr-core:${rootProject.ext.nostrSpringBootStarterVersion}") {
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'

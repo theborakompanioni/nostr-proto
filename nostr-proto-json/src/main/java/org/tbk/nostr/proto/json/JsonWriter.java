@@ -2,8 +2,6 @@ package org.tbk.nostr.proto.json;
 
 import org.tbk.nostr.proto.*;
 
-import java.io.IOException;
-
 import static org.tbk.nostr.proto.json.Json.json;
 
 public final class JsonWriter {
@@ -29,13 +27,9 @@ public final class JsonWriter {
     }
 
     public static String toJson(Event val) {
-        try {
-            return json
-                    .composeString()
-                    .addObject(Json.asMap(val))
-                    .finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return json
+                .composeString()
+                .addPOJO(Json.asMap(val))
+                .finish();
     }
 }

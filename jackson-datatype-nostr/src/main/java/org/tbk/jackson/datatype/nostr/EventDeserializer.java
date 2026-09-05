@@ -1,12 +1,10 @@
 package org.tbk.jackson.datatype.nostr;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import org.tbk.nostr.proto.Event;
 import org.tbk.nostr.proto.json.JsonReader;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
 public class EventDeserializer extends StdDeserializer<Event> {
 
@@ -15,7 +13,7 @@ public class EventDeserializer extends StdDeserializer<Event> {
     }
 
     @Override
-    public Event deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public Event deserialize(JsonParser p, DeserializationContext ctxt) {
         return JsonReader.fromJson(p.readValueAsTree().toString(), Event.newBuilder());
     }
 }
