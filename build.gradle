@@ -11,6 +11,10 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${rootProject.ext.springBootGradlePluginVersion}")
         classpath("com.google.protobuf:protobuf-gradle-plugin:${rootProject.ext.protobufGradleVersion}")
     }
+    // https://docs.gradle.org/current/userguide/dependency_locking.html#sec:activate-locking-build-script
+    configurations.classpath {
+        resolutionStrategy.activateDependencyLocking()
+    }
 }
 
 plugins {
@@ -62,6 +66,23 @@ allprojects {
                 'dependency-tuple-expression'
         ]
     }
+
+    dependencyLocking {
+        lockMode = LockMode.STRICT
+        // locks all project configurations (but not the `buildscript` ones)
+        lockAllConfigurations()
+    }
+
+    configurations.configureEach {
+        resolutionStrategy {
+            // check for updates in modules every build
+            // cacheChangingModulesFor 0, 'seconds'
+            preferProjectModules()
+            // fail eagerly on version conflict (includes transitive dependencies)
+            // e.g. multiple different versions of the same dependency (group and name are equal)
+            failOnVersionConflict()
+        }
+    }
 }
 
 configure(rootProject) {
@@ -88,6 +109,12 @@ subprojects {
     apply plugin: 'com.netflix.nebula.facet'
     apply plugin: 'com.netflix.nebula.integtest-standalone'
     apply plugin: 'io.spring.dependency-management'
+
+    configurations.configureEach {
+        resolutionStrategy {
+            preferProjectModules()
+        }
+    }
 
     java {
         sourceCompatibility = JavaVersion.VERSION_21
