@@ -12,6 +12,7 @@ sourceSets {
         }
     }
 }
+
 configurations.configureEach {
     resolutionStrategy {
         dependencySubstitution {
