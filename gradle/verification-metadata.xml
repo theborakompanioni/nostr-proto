@@ -48,7 +48,10 @@
             <trusting group="org.apache.commons"/>
          </trusted-key>
          <trusted-key id="2E3A1AFFE42B5F53AF19F780BCF4173966770193" group="org.jetbrains" name="annotations" version="13.0"/>
-         <trusted-key id="2FC53E6B1F681184F4CCD637F5C81DE10A0B8ECC" group="org.yaml" name="snakeyaml" version="2.5"/>
+         <trusted-key id="2FC53E6B1F681184F4CCD637F5C81DE10A0B8ECC">
+            <trusting group="org.yaml" name="snakeyaml" version="2.5"/>
+            <trusting group="org.yaml" name="snakeyaml" version="2.6"/>
+         </trusted-key>
          <trusted-key id="328B1E61822CF53DB1EA7C47F461A32102C936BB" group="org.seleniumhq.selenium" name="selenium-bom" version="4.43.0"/>
          <trusted-key id="34441E504A937F43EB0DAEF96A65176A0FB1CD0B" group="org.apache.groovy" name="groovy-bom"/>
          <trusted-key id="34D6FF19930ADF43AC127792A50569C7CA7FA1F0" group="com.jcraft" name="jzlib" version="1.1.2"/>
@@ -56,7 +59,10 @@
          <trusted-key id="3690C240CE51B4670D30AD1C38EE757D69184620" group="org.tukaani" name="xz" version="1.12"/>
          <trusted-key id="3F05DDA9F317301E927136D417A27CE7A60FF5F0" group="io.opentelemetry" name="opentelemetry-bom"/>
          <trusted-key id="3F2A008A91D11A7FAC4A0786F13D3E721D56BD54" group="org.reflections" name="reflections" version="0.10.2"/>
-         <trusted-key id="41CD49B4EF5876F9E9F691DABAC30622339994C4" group="org.jspecify" name="jspecify" version="1.0.0"/>
+         <trusted-key id="41CD49B4EF5876F9E9F691DABAC30622339994C4">
+            <trusting group="org.jspecify" name="jspecify" version="1.0.0"/>
+            <trusting group="org.jspecify" name="jspecify" version="1.0.1"/>
+         </trusted-key>
          <trusted-key id="41D266DB4427983A1A4AFB0C3684155E9365C30E" group="com.jayway.jsonpath" name="json-path" version="2.10.0"/>
          <trusted-key id="44FBDBBC1A00FE414F1C1873586654072EAD6677" group="org.sonatype.oss" name="oss-parent" version="9"/>
          <trusted-key id="475F3B8E59E6E63AA78067482C7B12F2A511E325" group="org.slf4j"/>
