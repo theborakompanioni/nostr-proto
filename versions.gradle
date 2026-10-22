@@ -7,7 +7,7 @@ ext {
     checkstyleVersion = '14.1.0'
     findsecbugsPluginVersion = '1.14.0'
     nostrSpringBootStarterVersion = '0.6.0'
-    springBootGradlePluginVersion = '4.1.1'
+    springBootGradlePluginVersion = '4.1.2'
     springBootVersion = springBootGradlePluginVersion
     protobufGradleVersion = '0.10.0'
 }
