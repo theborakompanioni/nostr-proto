@@ -142,15 +142,17 @@ final class Json {
      * </code>
      */
     static Map<String, Object> asMap(Event val) {
-        return Map.of(
-                eventIdField.getJsonName(), HexFormat.of().formatHex(val.getId().toByteArray()),
-                eventPubkeyField.getJsonName(), HexFormat.of().formatHex(val.getPubkey().toByteArray()),
-                eventCreatedAtField.getJsonName(), val.getCreatedAt(),
-                eventKindField.getJsonName(), val.getKind(),
-                eventTagsField.getJsonName(), listFromTags(val.getTagsList()),
-                eventContentField.getJsonName(), val.getContent(),
-                eventSigField.getJsonName(), HexFormat.of().formatHex(val.getSig().toByteArray())
-        );
+        // Keep the order defined by NIP-01 to make the serialized output deterministic.
+        Map<String, Object> builder = new LinkedHashMap<>();
+        builder.put(eventIdField.getJsonName(), HexFormat.of().formatHex(val.getId().toByteArray()));
+        builder.put(eventPubkeyField.getJsonName(), HexFormat.of().formatHex(val.getPubkey().toByteArray()));
+        builder.put(eventCreatedAtField.getJsonName(), val.getCreatedAt());
+        builder.put(eventKindField.getJsonName(), val.getKind());
+        builder.put(eventTagsField.getJsonName(), listFromTags(val.getTagsList()));
+        builder.put(eventContentField.getJsonName(), val.getContent());
+        builder.put(eventSigField.getJsonName(), HexFormat.of().formatHex(val.getSig().toByteArray()));
+
+        return Collections.unmodifiableMap(builder);
     }
 
     static List<List<String>> listFromTags(List<TagValue> tags) {
@@ -244,7 +246,8 @@ final class Json {
      * </code>
      */
     static Map<String, Object> asMap(Filter filter) {
-        Map<String, Object> builder = new HashMap<>();
+        // Keep insertion order to make the serialized output deterministic.
+        Map<String, Object> builder = new LinkedHashMap<>();
 
         if (!filter.getIdsList().isEmpty()) {
             builder.put(filterIdsField.getJsonName(), filter.getIdsList()
@@ -260,12 +263,15 @@ final class Json {
             builder.put(filterKindsField.getJsonName(), filter.getKindsList());
         }
 
-        Map<String, Set<String>> singleLetterTags = filter.getTagsList().stream()
-                .filter(it -> it.getName().length() == 1)
-                .reduce(new HashMap<>(), (map, tag) -> {
-                    map.merge(tag.getName(), new HashSet<>(tag.getValuesList()), (oldVals, newVals) -> Stream.concat(oldVals.stream(), newVals.stream()).collect(Collectors.toSet()));
-                    return map;
-                }, (a, b) -> b);
+        // Preserve the order in which tags (and their values) were added.
+        Map<String, Set<String>> singleLetterTags = new LinkedHashMap<>();
+        for (TagFilter tag : filter.getTagsList()) {
+            if (tag.getName().length() == 1) {
+                singleLetterTags
+                        .computeIfAbsent(tag.getName(), key -> new LinkedHashSet<>())
+                        .addAll(tag.getValuesList());
+            }
+        }
 
         singleLetterTags.forEach((key, value) -> builder.put("#%s".formatted(key), value));
 
