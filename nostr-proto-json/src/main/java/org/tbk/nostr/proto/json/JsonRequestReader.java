@@ -31,7 +31,7 @@ final class JsonRequestReader {
                     @SuppressWarnings("unchecked")
                     Map<String, Object> eventMap = (Map<String, Object>) array[1];
                     yield request.setEvent(EventRequest.newBuilder()
-                                    .setEvent(Json.fromMap(eventMap, Event.newBuilder()))
+                                    .setEvent(Json.eventFromMap(eventMap, Event.newBuilder()))
                                     .build())
                             .build();
                 }
@@ -82,7 +82,7 @@ final class JsonRequestReader {
                     @SuppressWarnings("unchecked")
                     Map<String, Object> eventMap = (Map<String, Object>) array[1];
                     yield request.setAuth(AuthRequest.newBuilder()
-                                    .setEvent(Json.fromMap(eventMap, Event.newBuilder()))
+                                    .setEvent(Json.eventFromMap(eventMap, Event.newBuilder()))
                                     .build())
                             .build();
                 }
@@ -101,7 +101,7 @@ final class JsonRequestReader {
                     return filterMap;
                 })
                 .distinct()
-                .map(it -> Json.fromMap(it, Filter.newBuilder()))
+                .map(it -> Json.filterFromMap(it, Filter.newBuilder()))
                 .distinct()
                 .toList();
     }

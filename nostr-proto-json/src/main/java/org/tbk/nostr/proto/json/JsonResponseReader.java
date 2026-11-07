@@ -34,7 +34,7 @@ final class JsonResponseReader {
                     Map<String, Object> eventMap = (Map<String, Object>) array[2];
                     yield response.setEvent(EventResponse.newBuilder()
                                     .setSubscriptionId(subscriptionId)
-                                    .setEvent(Json.fromMap(eventMap, Event.newBuilder()))
+                                    .setEvent(Json.eventFromMap(eventMap, Event.newBuilder()))
                                     .build())
                             .build();
                 }

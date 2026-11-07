@@ -53,7 +53,7 @@ final class Json {
     private static final FieldDescriptor filterLimitField = filterDescriptor.findFieldByNumber(Filter.LIMIT_FIELD_NUMBER);
     private static final FieldDescriptor filterSearchField = filterDescriptor.findFieldByNumber(Filter.SEARCH_FIELD_NUMBER);
 
-    static Event fromMap(Map<String, Object> map, Event.Builder event) {
+    static Event eventFromMap(Map<String, Object> map, Event.Builder event) {
         List<FieldDescriptor> fields = Event.getDescriptor().getFields();
         for (FieldDescriptor field : fields) {
             Object value = map.get(field.getJsonName());
@@ -79,7 +79,7 @@ final class Json {
                 .build();
     }
 
-    static Event.Builder fromMapPartial(Map<String, Object> map, Event.Builder event) {
+    static Event.Builder eventFromMapPartial(Map<String, Object> map, Event.Builder event) {
         List<FieldDescriptor> fields = Event.getDescriptor().getFields();
         for (FieldDescriptor field : fields) {
             Object value = map.get(field.getJsonName());
@@ -132,22 +132,24 @@ final class Json {
     }
 
     /**
+     * Returns the event as a map in NIP-01 field order.
+     *
      * <code>
      * {
-     * "id": <32-bytes lowercase hex-encoded sha256 of the serialized event data>,
-     * "pubkey": <32-bytes lowercase hex-encoded public key of the event creator>,
-     * "created_at": <unix timestamp in seconds>,
-     * "kind": <integer between 0 and 65535>,
+     * "id": &lt;32-bytes lowercase hex-encoded sha256 of the serialized event data&gt;,
+     * "pubkey": &lt;32-bytes lowercase hex-encoded public key of the event creator&gt;,
+     * "created_at": &lt;unix timestamp in seconds&gt;,
+     * "kind": &lt;integer between 0 and 65535&gt;,
      * "tags": [
-     * [<arbitrary string>...],
+     * [&lt;arbitrary string&gt;...],
      * // ...
      * ],
-     * "content": <arbitrary string>,
-     * "sig": <64-bytes lowercase hex of the signature of the sha256 hash of the serialized event data, which is the same as the "id" field>
+     * "content": &lt;arbitrary string&gt;,
+     * "sig": &lt;64-bytes lowercase hex of the signature of the sha256 hash of the serialized event data, which is the same as the "id" field&gt;
      * }
      * </code>
      */
-    static Map<String, Object> asMap(Event val) {
+    static Map<String, Object> eventAsMap(Event val) {
         // Keep the order defined by NIP-01 to make the serialized output deterministic.
         Map<String, Object> builder = new LinkedHashMap<>();
         builder.put(eventIdField.getJsonName(), HexFormat.of().formatHex(val.getId().toByteArray()));
@@ -167,7 +169,7 @@ final class Json {
                 .toList();
     }
 
-    static Filter fromMap(Map<String, Object> map, Filter.Builder builder) {
+    static Filter filterFromMap(Map<String, Object> map, Filter.Builder builder) {
         @SuppressWarnings("unchecked")
         List<ByteString> ids = Optional.ofNullable((List<Object>) map.get(filterIdsField.getJsonName()))
                 .orElseGet(Collections::emptyList).stream()
@@ -239,19 +241,21 @@ final class Json {
     }
 
     /**
+     * Returns the filter as a map of its set properties.
+     *
      * <code>
      * {
-     * "ids": <a list of event ids>,
-     * "authors": <a list of lowercase pubkeys, the pubkey of an event must be one of these>,
-     * "kinds": <a list of a kind numbers>,
-     * "#<single-letter (a-zA-Z)>": <a list of tag values, for #e — a list of event ids, for #p — a list of pubkeys, etc.>,
-     * "since": <an integer unix timestamp in seconds, events must be newer than this to pass>,
-     * "until": <an integer unix timestamp in seconds, events must be older than this to pass>,
-     * "limit": <maximum number of events relays SHOULD return in the initial query>
+     * "ids": &lt;a list of event ids&gt;,
+     * "authors": &lt;a list of lowercase pubkeys, the pubkey of an event must be one of these&gt;,
+     * "kinds": &lt;a list of a kind numbers&gt;,
+     * "#&lt;single-letter (a-zA-Z)&gt;": &lt;a list of tag values, for #e — a list of event ids, for #p — a list of pubkeys, etc.&gt;,
+     * "since": &lt;an integer unix timestamp in seconds, events must be newer than this to pass&gt;,
+     * "until": &lt;an integer unix timestamp in seconds, events must be older than this to pass&gt;,
+     * "limit": &lt;maximum number of events relays SHOULD return in the initial query&gt;
      * }
      * </code>
      */
-    static Map<String, Object> asMap(Filter filter) {
+    static Map<String, Object> filterAsMap(Filter filter) {
         // Keep insertion order to make the serialized output deterministic.
         Map<String, Object> builder = new LinkedHashMap<>();
 

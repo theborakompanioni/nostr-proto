@@ -32,7 +32,7 @@ final class JsonResponseWriter {
                 .startArray()
                 .add("EVENT")
                 .add(val.getSubscriptionId())
-                .addPOJO(Json.asMap(val.getEvent()))
+                .addPOJO(Json.eventAsMap(val.getEvent()))
                 .end()
                 .finish();
     }
