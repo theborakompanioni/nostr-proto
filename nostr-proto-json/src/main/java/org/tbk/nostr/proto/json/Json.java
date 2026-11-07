@@ -17,6 +17,10 @@ import java.util.stream.Stream;
 
 final class Json {
 
+    private Json() {
+        throw new UnsupportedOperationException();
+    }
+
     static final JSON json = JSON.std
             .with(JSON.Feature.FAIL_ON_DUPLICATE_MAP_KEYS)
             .with(JSON.Feature.READ_ONLY)
@@ -98,6 +102,8 @@ final class Json {
                         break;
                     case "sig":
                         event.setSig(ByteString.fromHex(String.valueOf(value)));
+                        break;
+                    default:
                         break;
                 }
             }

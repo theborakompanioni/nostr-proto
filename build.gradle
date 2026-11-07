@@ -231,10 +231,9 @@ subprojects {
         reportLevel = Confidence.valueOf("LOW") /* `Confidence.LOW` does not work; see https://github.com/spotbugs/spotbugs-gradle-plugin/issues/972 (last check on 2025-12-28)*/
         ignoreFailures = false
         excludeFilter = rootProject.file('./spotbugs-exclude.xml')
-        reportsDir = rootProject.file("$rootProject.layout.buildDirectory/reports/spotbugs/$project.name")
+        reportsDir = rootProject.layout.buildDirectory.dir("reports/spotbugs/$project.name").get().asFile
     }
     tasks.withType(SpotBugsTask).configureEach {
-        onlyIf { gradle.taskGraph.hasTask('build') }
         reports {
             html.required = true
             xml.required = false
@@ -246,14 +245,16 @@ subprojects {
         configFile = rootProject.file('./checkstyle.xml')
         maxErrors = 0
         ignoreFailures = false
-        reportsDir = rootProject.file("$rootProject.layout.buildDirectory/reports/checkstyle/$project.name")
+        reportsDir = rootProject.layout.buildDirectory.dir("reports/checkstyle/$project.name").get().asFile
     }
-    tasks.withType(Checkstyle).configureEach {
-        onlyIf { gradle.taskGraph.hasTask('build') }
-        /*reports {
-            xml.enabled = false
-            html.enabled = true
-        }*/
+    // This module only contains generated protobuf code; quality gates are not applicable.
+    if (project.path == ':nostr-proto') {
+        tasks.withType(SpotBugsTask).configureEach {
+            enabled = false
+        }
+        tasks.withType(Checkstyle).configureEach {
+            enabled = false
+        }
     }
 
     tasks.withType(AbstractArchiveTask).configureEach {

@@ -160,7 +160,7 @@ class JsonRequestReaderTest {
                                 "30023:f7234bd4c1394dda46d09f35bd384dd30cc552ad5541990f98844fb06676e9ca:abcd",
                                 "12345:f7234bd4c1394dda46d09f35bd384dd30cc552ad5541990f98844fb06676e9ca:test"
                         ))
-                        .addTags(MoreTags.filter(IndexedTag.Z,"test"))
+                        .addTags(MoreTags.filter(IndexedTag.Z, "test"))
                         .setSince(21)
                         .setUntil(42)
                         .setLimit(-1)
