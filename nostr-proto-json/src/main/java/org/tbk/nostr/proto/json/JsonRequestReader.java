@@ -42,21 +42,10 @@ final class JsonRequestReader {
                     }
 
                     String subscriptionId = String.valueOf(array[1]);
-                    List<Map<String, Object>> filterMaps = Stream.of(array).skip(2)
-                            .map(it -> {
-                                @SuppressWarnings("unchecked")
-                                Map<String, Object> filterMap = (Map<String, Object>) it;
-                                return filterMap;
-                            })
-                            .distinct()
-                            .toList();
 
                     yield request.setReq(ReqRequest.newBuilder()
                                     .setId(subscriptionId)
-                                    .addAllFilters(filterMaps.stream()
-                                            .map(it -> Json.fromMap(it, Filter.newBuilder()))
-                                            .distinct()
-                                            .toList())
+                                    .addAllFilters(filtersFromArray(array))
                                     .build())
                             .build();
                 }
@@ -72,18 +61,16 @@ final class JsonRequestReader {
                                     .build())
                             .build();
                 }
-                // ["COUNT", <subscription_id>, {"kinds": [3], "#p": [<pubkey>]}]
+                // ["COUNT", <subscription_id>, <filters1>, <filters2>, ...]
                 case COUNT -> {
                     if (array.length < 3) {
                         throw new IllegalArgumentException("Could not parse passed arg");
                     }
                     String subscriptionId = String.valueOf(array[1]);
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> filterMap = (Map<String, Object>) array[2];
 
                     yield request.setCount(CountRequest.newBuilder()
                                     .setId(subscriptionId)
-                                    .addFilters(Json.fromMap(filterMap, Filter.newBuilder()))
+                                    .addAllFilters(filtersFromArray(array))
                                     .build())
                             .build();
                 }
@@ -104,5 +91,18 @@ final class JsonRequestReader {
         } else {
             throw new IllegalArgumentException("Could not parse passed arg");
         }
+    }
+
+    private static List<Filter> filtersFromArray(Object[] array) {
+        return Stream.of(array).skip(2)
+                .map(it -> {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> filterMap = (Map<String, Object>) it;
+                    return filterMap;
+                })
+                .distinct()
+                .map(it -> Json.fromMap(it, Filter.newBuilder()))
+                .distinct()
+                .toList();
     }
 }

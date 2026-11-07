@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Serialize event and filter JSON in a deterministic order
 
+### Fixed
+- Parse all filters in `COUNT` requests
+
 ## [0.5.0] - 2026-09-05
 ## Breaking
 - update jackson-jr-all to v3.2.2

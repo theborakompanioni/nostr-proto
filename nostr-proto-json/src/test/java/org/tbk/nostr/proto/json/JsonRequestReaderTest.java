@@ -344,6 +344,36 @@ class JsonRequestReaderTest {
     }
 
     @Test
+    void itShouldReadCountRequest1WithMultipleFilters() {
+        Request request = JsonRequestReader.fromJson("""
+                [
+                  "COUNT",
+                  "subscription_id",
+                  {
+                    "ids": ["5c83da77af1dec6d7289834998ad7aafbd9e2191396d75ec3cc27f5a77226f36"]
+                  },
+                  {
+                    "kinds": [1, 2, 21]
+                  },
+                  {
+                    "kinds": [1, 2, 21]
+                  }
+                ]
+                """, Request.newBuilder());
+
+        assertThat(request.getKindCase(), is(Request.KindCase.COUNT));
+        assertThat(request.getCount(), is(CountRequest.newBuilder()
+                .setId("subscription_id")
+                .addFilters(Filter.newBuilder()
+                        .addIds(ByteString.fromHex("5c83da77af1dec6d7289834998ad7aafbd9e2191396d75ec3cc27f5a77226f36"))
+                        .build())
+                .addFilters(Filter.newBuilder()
+                        .addAllKinds(List.of(1, 2, 21))
+                        .build())
+                .build()));
+    }
+
+    @Test
     void itShouldReadAuthRequest0() {
         Request request = JsonRequestReader.fromJson("""
                 [
