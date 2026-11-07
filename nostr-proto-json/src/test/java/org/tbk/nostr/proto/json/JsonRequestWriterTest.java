@@ -15,8 +15,10 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.HexFormat;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
 class JsonRequestWriterTest {
@@ -486,6 +488,52 @@ class JsonRequestWriterTest {
                   "#Z": ["Z0", "Z1", "Z3"]
                 }
                 """)));
+    }
+
+    @Test
+    void itShouldWriteEventPropertiesInDeterministicOrder() {
+        String json = JsonRequestWriter.toJson(MoreEvents.withEventId(Event.newBuilder()
+                        .setCreatedAt(1)
+                        .setPubkey(ByteString.fromHex(testSigner.getPublicKey().value.toHex()))
+                        .setKind(1)
+                        .setContent("GM"))
+                .build());
+
+        assertPropertyOrder(json, "id", "pubkey", "created_at", "kind", "tags", "content", "sig");
+    }
+
+    @Test
+    void itShouldWriteFilterPropertiesAndTagValuesInDeterministicOrder() {
+        String json = JsonRequestWriter.toJson(Filter.newBuilder()
+                .addIds(ByteString.fromHex("5c83da77af1dec6d7289834998ad7aafbd9e2191396d75ec3cc27f5a77226f36"))
+                .addAuthors(ByteString.fromHex("493557ea5445d54298010d895d964e286c5d8fd704ac03823c6ddb0317643cef"))
+                .addAllKinds(List.of(1))
+                .addTags(MoreTags.filter(IndexedTag.e, "e2", "e1"))
+                .addTags(MoreTags.filter(IndexedTag.p, "p1", "p0"))
+                .addTags(MoreTags.filter(IndexedTag.Z, "Z1", "Z0"))
+                .setSince(1)
+                .setUntil(2)
+                .setLimit(3)
+                .setSearch("GM")
+                .build());
+
+        assertPropertyOrder(json, "ids", "authors", "kinds", "#e", "#p", "#Z", "since", "until", "limit", "search");
+
+        Map<String, Object> map = JSON.std
+                .with(JSON.Feature.PRESERVE_FIELD_ORDERING)
+                .mapFrom(json);
+        assertThat(map.get("#e"), is(List.of("e2", "e1")));
+        assertThat(map.get("#p"), is(List.of("p1", "p0")));
+        assertThat(map.get("#Z"), is(List.of("Z1", "Z0")));
+    }
+
+    private static void assertPropertyOrder(String json, String... propertyNames) {
+        int previousIndex = -1;
+        for (String propertyName : propertyNames) {
+            int currentIndex = json.indexOf("\"%s\"".formatted(propertyName));
+            assertThat("Expected property '%s' in: %s".formatted(propertyName, json), currentIndex, greaterThan(previousIndex));
+            previousIndex = currentIndex;
+        }
     }
 
     @Test

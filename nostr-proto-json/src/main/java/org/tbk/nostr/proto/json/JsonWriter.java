@@ -22,14 +22,14 @@ public final class JsonWriter {
         return JsonRequestWriter.toJson(val);
     }
 
-    public static String toJsonForSigning(EventOrBuilder event) {
-        return JsonRequestWriter.toJsonForSigning(event);
-    }
-
     public static String toJson(Event val) {
         return json
                 .composeString()
-                .addPOJO(Json.asMap(val))
+                .addPOJO(Json.eventAsMap(val))
                 .finish();
+    }
+
+    public static String toJsonForSigning(EventOrBuilder event) {
+        return JsonRequestWriter.toJsonForSigning(event);
     }
 }

@@ -26,10 +26,10 @@ public final class JsonReader {
     }
 
     public static Event fromJson(String val, Event.Builder event) {
-        return Json.fromMap(json.mapFrom(val), event);
+        return Json.eventFromMap(json.mapFrom(val), event);
     }
 
     public static Event.Builder fromJsonPartial(String val, Event.Builder event) {
-        return Json.fromMapPartial(json.mapFrom(val), event);
+        return Json.eventFromMapPartial(json.mapFrom(val), event);
     }
 }

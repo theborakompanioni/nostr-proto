@@ -12,6 +12,8 @@ import org.tbk.nostr.util.MoreTags;
 
 import java.util.List;
 
+import tools.jackson.jr.private_.JacksonException;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -160,7 +162,7 @@ class JsonRequestReaderTest {
                                 "30023:f7234bd4c1394dda46d09f35bd384dd30cc552ad5541990f98844fb06676e9ca:abcd",
                                 "12345:f7234bd4c1394dda46d09f35bd384dd30cc552ad5541990f98844fb06676e9ca:test"
                         ))
-                        .addTags(MoreTags.filter(IndexedTag.Z,"test"))
+                        .addTags(MoreTags.filter(IndexedTag.Z, "test"))
                         .setSince(21)
                         .setUntil(42)
                         .setLimit(-1)
@@ -344,6 +346,36 @@ class JsonRequestReaderTest {
     }
 
     @Test
+    void itShouldReadCountRequest1WithMultipleFilters() {
+        Request request = JsonRequestReader.fromJson("""
+                [
+                  "COUNT",
+                  "subscription_id",
+                  {
+                    "ids": ["5c83da77af1dec6d7289834998ad7aafbd9e2191396d75ec3cc27f5a77226f36"]
+                  },
+                  {
+                    "kinds": [1, 2, 21]
+                  },
+                  {
+                    "kinds": [1, 2, 21]
+                  }
+                ]
+                """, Request.newBuilder());
+
+        assertThat(request.getKindCase(), is(Request.KindCase.COUNT));
+        assertThat(request.getCount(), is(CountRequest.newBuilder()
+                .setId("subscription_id")
+                .addFilters(Filter.newBuilder()
+                        .addIds(ByteString.fromHex("5c83da77af1dec6d7289834998ad7aafbd9e2191396d75ec3cc27f5a77226f36"))
+                        .build())
+                .addFilters(Filter.newBuilder()
+                        .addAllKinds(List.of(1, 2, 21))
+                        .build())
+                .build()));
+    }
+
+    @Test
     void itShouldReadAuthRequest0() {
         Request request = JsonRequestReader.fromJson("""
                 [
@@ -374,5 +406,71 @@ class JsonRequestReaderTest {
                         )
                         .build())
                 .build()));
+    }
+
+    @Test
+    void itShouldFailToParseMalformedJson() {
+        assertThrows(JacksonException.class, () -> JsonRequestReader.fromJson("", Request.newBuilder()));
+        assertThrows(JacksonException.class, () -> JsonRequestReader.fromJson("not json", Request.newBuilder()));
+        assertThrows(JacksonException.class, () -> JsonRequestReader.fromJson("[", Request.newBuilder()));
+        assertThrows(JacksonException.class, () -> JsonRequestReader.fromJson("{}", Request.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseRequestWithInvalidCommand() {
+        assertThrows(IllegalArgumentException.class, () -> JsonRequestReader.fromJson("[\"FOO\"]", Request.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonRequestReader.fromJson("[1]", Request.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseRequestWithDuplicateKeys() {
+        assertThrows(JacksonException.class, () -> JsonRequestReader.fromJson("""
+                [
+                  "EVENT",
+                  {
+                    "id": "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                    "id": "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                    "pubkey": "493557ea5445d54298010d895d964e286c5d8fd704ac03823c6ddb0317643cef",
+                    "created_at": 1,
+                    "kind": 1,
+                    "tags": [ ],
+                    "content": "GM",
+                    "sig": ""
+                  }
+                ]
+                """, Request.newBuilder()));
+        assertThrows(JacksonException.class, () -> JsonRequestReader.fromJson("""
+                [
+                  "REQ",
+                  "subscription_id",
+                  {
+                    "kinds": [1],
+                    "kinds": [2]
+                  }
+                ]
+                """, Request.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseRequestsWithMissingArguments() {
+        assertThrows(IllegalArgumentException.class, () -> JsonRequestReader.fromJson("[\"CLOSE\"]", Request.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonRequestReader.fromJson("[\"COUNT\", \"subscription_id\"]", Request.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonRequestReader.fromJson("[\"AUTH\"]", Request.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseFilterWithInvalidValues() {
+        assertThrows(NumberFormatException.class, () -> JsonRequestReader.fromJson("""
+                ["REQ", "subscription_id", {"kinds": ["not-a-number"]}]
+                """, Request.newBuilder()));
+        assertThrows(NumberFormatException.class, () -> JsonRequestReader.fromJson("""
+                ["REQ", "subscription_id", {"ids": ["not-hex"]}]
+                """, Request.newBuilder()));
+        assertThrows(NumberFormatException.class, () -> JsonRequestReader.fromJson("""
+                ["REQ", "subscription_id", {"since": "not-a-number"}]
+                """, Request.newBuilder()));
+        assertThrows(NumberFormatException.class, () -> JsonRequestReader.fromJson("""
+                ["REQ", "subscription_id", {"limit": "not-a-number"}]
+                """, Request.newBuilder()));
     }
 }
