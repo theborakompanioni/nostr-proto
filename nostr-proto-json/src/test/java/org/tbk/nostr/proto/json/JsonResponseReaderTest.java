@@ -6,6 +6,8 @@ import org.tbk.nostr.proto.*;
 
 import java.net.URI;
 
+import tools.jackson.jr.private_.JacksonException;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -391,5 +393,69 @@ class JsonResponseReaderTest {
         assertThat(metadata.getBot(), is(false));
         assertThat(metadata.getNip05(), is("_@dergigi.com"));
         assertThat(metadata.getLud16(), is("dergigi@primal.net"));
+    }
+
+    @Test
+    void itShouldFailToParseMalformedJson() {
+        assertThrows(JacksonException.class, () -> JsonResponseReader.fromJson("", Response.newBuilder()));
+        assertThrows(JacksonException.class, () -> JsonResponseReader.fromJson("not json", Response.newBuilder()));
+        assertThrows(JacksonException.class, () -> JsonResponseReader.fromJson("{", Response.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseResponseWithInvalidCommand() {
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[\"FOO\"]", Response.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[1]", Response.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseResponseWithDuplicateKeys() {
+        assertThrows(JacksonException.class, () -> JsonResponseReader.fromJson("""
+                [
+                  "EVENT",
+                  "subscription_id",
+                  {
+                    "id": "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                    "id": "40a1d1223bc059a54185c097b4f6f352cf24e27a483fd60d39e635883a09091e",
+                    "pubkey": "493557ea5445d54298010d895d964e286c5d8fd704ac03823c6ddb0317643cef",
+                    "created_at": 1,
+                    "kind": 1,
+                    "tags": [ ],
+                    "content": "GM",
+                    "sig": ""
+                  }
+                ]
+                """, Response.newBuilder()));
+        assertThrows(JacksonException.class, () -> JsonResponseReader.fromJson("""
+                ["COUNT", "subscription_id", {"count": 1, "count": 2}]
+                """, Response.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseResponsesWithMissingArguments() {
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[\"EVENT\", \"subscription_id\"]", Response.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[\"OK\", \"event_id\", true]", Response.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[\"EOSE\"]", Response.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[\"CLOSED\", \"subscription_id\"]", Response.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[\"NOTICE\"]", Response.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[\"COUNT\", \"subscription_id\"]", Response.newBuilder()));
+        assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("[\"AUTH\"]", Response.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseOkResponseWithInvalidEventId() {
+        assertThrows(NumberFormatException.class, () -> JsonResponseReader.fromJson("""
+                ["OK", "not-hex", true, ""]
+                """, Response.newBuilder()));
+    }
+
+    @Test
+    void itShouldFailToParseCountResponseWithInvalidResult() {
+        assertThrows(NumberFormatException.class, () -> JsonResponseReader.fromJson("""
+                ["COUNT", "subscription_id", {}]
+                """, Response.newBuilder()));
+        assertThrows(NumberFormatException.class, () -> JsonResponseReader.fromJson("""
+                ["COUNT", "subscription_id", {"count": "not-a-number"}]
+                """, Response.newBuilder()));
     }
 }
