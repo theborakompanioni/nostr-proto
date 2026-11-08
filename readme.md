@@ -32,6 +32,7 @@ message Event {
 ## Table of Contents
 
 - [Install](#install)
+- [Usage](#usage)
 - [Development](#development)
 - [Contributing](#contributing)
 - [Resources](#resources)
@@ -52,6 +53,73 @@ repositories {
 ```groovy
 implementation "io.github.theborakompanioni:nostr-proto:${nostrProtoVersion}"
 implementation "io.github.theborakompanioni:nostr-proto-json:${nostrProtoVersion}"
+implementation "io.github.theborakompanioni:jackson-datatype-nostr:${nostrProtoVersion}"
+```
+
+## Usage
+
+### JSON
+
+The `nostr-proto-json` module reads and writes NIP-01 JSON messages.
+
+
+```java
+import org.tbk.nostr.identity.Signer;
+import org.tbk.nostr.identity.SimpleSigner;
+import org.tbk.nostr.proto.Event;
+import org.tbk.nostr.proto.EventRequest;
+import org.tbk.nostr.proto.Request;
+import org.tbk.nostr.proto.json.JsonWriter;
+import org.tbk.nostr.util.MoreEvents;
+
+Signer signer = SimpleSigner.fromPrivateKeyHex(privateKey);
+Event event = MoreEvents.finalize(signer, Event.newBuilder()
+        .setCreatedAt(1714851835)
+        .setKind(1)
+        .setContent("GM"));
+
+Request request = Request.newBuilder()
+        .setEvent(EventRequest.newBuilder().setEvent(event))
+        .build();
+
+String json = JsonWriter.toJson(request);
+// ["EVENT",{"id":"...","pubkey":"...","created_at":1714851835,"content":"GM",...}]
+```
+
+> The signing example uses `nostr-core` and `nostr-identity`
+> (`io.github.theborakompanioni:nostr-core` and `io.github.theborakompanioni:nostr-identity`).
+
+Read a request or response:
+
+```java
+import org.tbk.nostr.proto.Request;
+import org.tbk.nostr.proto.Response;
+import org.tbk.nostr.proto.json.JsonReader;
+
+Request req = JsonReader.fromJson("""
+        ["REQ", "subscription_id", {"kinds": [1], "limit": 10}]
+        """, Request.newBuilder());
+
+Response notice = JsonReader.fromJson("""
+        ["NOTICE", "hello"]
+        """, Response.newBuilder());
+```
+
+### Jackson
+
+The `jackson-datatype-nostr` module registers (de)serializers for `Event`, `Request`, `Response`, and `ProfileMetadata`.
+
+```java
+import org.tbk.jackson.datatype.nostr.NostrModule;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+
+ObjectMapper mapper = JsonMapper.builder()
+        .addModule(new NostrModule())
+        .build();
+
+String json = mapper.writeValueAsString(request);
+Request parsed = mapper.readValue(json, Request.class);
 ```
 
 ## Development
