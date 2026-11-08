@@ -473,4 +473,47 @@ class JsonRequestReaderTest {
                 ["REQ", "subscription_id", {"limit": "not-a-number"}]
                 """, Request.newBuilder()));
     }
+
+    @Test
+    void itShouldRejectTrailingContent() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> JsonRequestReader.fromJson("""
+                ["CLOSE", "subscription_id"] trailing
+                """, Request.newBuilder()));
+
+        assertThat(exception.getMessage(), is("Unexpected trailing content"));
+    }
+
+    @Test
+    void itShouldAllowTrailingWhitespace() {
+        Request request = JsonRequestReader.fromJson("[ \"CLOSE\", \"subscription_id\" ] \t\r\n", Request.newBuilder());
+
+        assertThat(request.getClose().getId(), is("subscription_id"));
+    }
+
+    @Test
+    void itShouldIgnoreBracketsInsideStrings() {
+        Request request = JsonRequestReader.fromJson("""
+                ["REQ", "subscription_id", {"search": "] }"}]
+                """, Request.newBuilder());
+
+        assertThat(request.getReq().getFilters(0).getSearch(), is("] }"));
+    }
+
+    @Test
+    void itShouldFailToParseNonObjectFilter() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> JsonRequestReader.fromJson("""
+                ["REQ", "subscription_id", "not-an-object"]
+                """, Request.newBuilder()));
+
+        assertThat(exception.getMessage(), is("Expected filter to be a JSON object"));
+    }
+
+    @Test
+    void itShouldFailToParseNonObjectEvent() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> JsonRequestReader.fromJson("""
+                ["EVENT", "not-an-object"]
+                """, Request.newBuilder()));
+
+        assertThat(exception.getMessage(), is("Expected event to be a JSON object"));
+    }
 }

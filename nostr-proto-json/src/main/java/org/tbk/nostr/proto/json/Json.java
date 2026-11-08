@@ -35,6 +35,76 @@ final class Json {
     static final JSON jsonForSigning = json
             .without(JSON.Feature.PRETTY_PRINT_OUTPUT);
 
+    static Object[] arrayFrom(String val) {
+        Object[] array = json.arrayFrom(val);
+        assertNoTrailingContent(val);
+        return array;
+    }
+
+    static Map<String, Object> mapFrom(String val) {
+        Map<String, Object> map = json.mapFrom(val);
+        assertNoTrailingContent(val);
+        return map;
+    }
+
+    static Map<String, Object> asJsonObject(Object value, String description) {
+        if (value instanceof Map<?, ?>) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> map = (Map<String, Object>) value;
+            return map;
+        }
+        throw new IllegalArgumentException("Expected %s to be a JSON object".formatted(description));
+    }
+
+    private static void assertNoTrailingContent(String val) {
+        int end = findEndOfJsonValue(val);
+        if (end < 0) {
+            return;
+        }
+
+        for (int i = end + 1; i < val.length(); i++) {
+            char c = val.charAt(i);
+            if (c != ' ' && c != '\t' && c != '\n' && c != '\r') {
+                throw new IllegalArgumentException("Unexpected trailing content");
+            }
+        }
+    }
+
+    private static int findEndOfJsonValue(String val) {
+        int depth = 0;
+        boolean inString = false;
+        boolean escaped = false;
+
+        for (int i = 0; i < val.length(); i++) {
+            char c = val.charAt(i);
+            if (inString) {
+                if (escaped) {
+                    escaped = false;
+                } else if (c == '\\') {
+                    escaped = true;
+                } else if (c == '"') {
+                    inString = false;
+                }
+                continue;
+            }
+
+            switch (c) {
+                case '"' -> inString = true;
+                case '[', '{' -> depth++;
+                case ']', '}' -> {
+                    depth--;
+                    if (depth == 0) {
+                        return i;
+                    }
+                }
+                default -> {
+                    // Other characters are not relevant for the structure.
+                }
+            }
+        }
+        return -1;
+    }
+
     private static final Descriptors.Descriptor eventDescriptor = Event.getDescriptor();
     private static final FieldDescriptor eventIdField = eventDescriptor.findFieldByNumber(Event.ID_FIELD_NUMBER);
     private static final FieldDescriptor eventPubkeyField = eventDescriptor.findFieldByNumber(Event.PUBKEY_FIELD_NUMBER);

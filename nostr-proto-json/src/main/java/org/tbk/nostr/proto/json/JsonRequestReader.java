@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.tbk.nostr.proto.json.Json.json;
-
 final class JsonRequestReader {
 
     private JsonRequestReader() {
@@ -15,7 +13,7 @@ final class JsonRequestReader {
     }
 
     static Request fromJson(String val, Request.Builder request) {
-        Object[] array = json.arrayFrom(val);
+        Object[] array = Json.arrayFrom(val);
         if (array.length < 1) {
             throw new IllegalArgumentException("Could not parse passed arg");
         }
@@ -28,8 +26,7 @@ final class JsonRequestReader {
                     if (array.length < 2) {
                         throw new IllegalArgumentException("Could not parse passed arg");
                     }
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> eventMap = (Map<String, Object>) array[1];
+                    Map<String, Object> eventMap = Json.asJsonObject(array[1], "event");
                     yield request.setEvent(EventRequest.newBuilder()
                                     .setEvent(Json.eventFromMap(eventMap, Event.newBuilder()))
                                     .build())
@@ -79,8 +76,7 @@ final class JsonRequestReader {
                         throw new IllegalArgumentException("Could not parse passed arg");
                     }
 
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> eventMap = (Map<String, Object>) array[1];
+                    Map<String, Object> eventMap = Json.asJsonObject(array[1], "event");
                     yield request.setAuth(AuthRequest.newBuilder()
                                     .setEvent(Json.eventFromMap(eventMap, Event.newBuilder()))
                                     .build())
@@ -95,11 +91,7 @@ final class JsonRequestReader {
 
     private static List<Filter> filtersFromArray(Object[] array) {
         return Stream.of(array).skip(2)
-                .map(it -> {
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> filterMap = (Map<String, Object>) it;
-                    return filterMap;
-                })
+                .map(it -> Json.asJsonObject(it, "filter"))
                 .distinct()
                 .map(it -> Json.filterFromMap(it, Filter.newBuilder()))
                 .distinct()

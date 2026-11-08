@@ -7,8 +7,6 @@ import org.tbk.nostr.proto.*;
 import java.util.List;
 import java.util.Map;
 
-import static org.tbk.nostr.proto.json.Json.json;
-
 final class JsonResponseReader {
 
     private JsonResponseReader() {
@@ -16,7 +14,7 @@ final class JsonResponseReader {
     }
 
     static Response fromJson(String val, Response.Builder response) {
-        Object[] array = json.arrayFrom(val);
+        Object[] array = Json.arrayFrom(val);
         if (array.length < 1) {
             throw new IllegalArgumentException("Could not parse passed arg");
         }
@@ -30,8 +28,7 @@ final class JsonResponseReader {
                         throw new IllegalArgumentException("Could not parse passed arg");
                     }
                     String subscriptionId = String.valueOf(array[1]);
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> eventMap = (Map<String, Object>) array[2];
+                    Map<String, Object> eventMap = Json.asJsonObject(array[2], "event");
                     yield response.setEvent(EventResponse.newBuilder()
                                     .setSubscriptionId(subscriptionId)
                                     .setEvent(Json.eventFromMap(eventMap, Event.newBuilder()))
@@ -96,8 +93,7 @@ final class JsonResponseReader {
                         throw new IllegalArgumentException("Could not parse passed arg");
                     }
                     String subscriptionId = String.valueOf(array[1]);
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> countMap = (Map<String, Object>) array[2];
+                    Map<String, Object> countMap = Json.asJsonObject(array[2], "count result");
                     yield response.setCount(CountResponse.newBuilder()
                                     .setSubscriptionId(subscriptionId)
                                     .setResult(countFromMap(countMap, CountResult.newBuilder()))
@@ -122,7 +118,7 @@ final class JsonResponseReader {
     }
 
     static ProfileMetadata fromJson(String val, ProfileMetadata.Builder metadata) {
-        return metadataFromMap(json.mapFrom(val), metadata);
+        return metadataFromMap(Json.mapFrom(val), metadata);
     }
 
     private static CountResult countFromMap(Map<String, Object> map, CountResult.Builder builder) {
@@ -130,8 +126,13 @@ final class JsonResponseReader {
         Descriptors.FieldDescriptor countField = descriptor.findFieldByNumber(CountResult.COUNT_FIELD_NUMBER);
         Descriptors.FieldDescriptor approximateField = descriptor.findFieldByNumber(CountResult.APPROXIMATE_FIELD_NUMBER);
 
+        Object count = map.get(countField.getJsonName());
+        if (count == null) {
+            throw new IllegalArgumentException("Missing property '%s'".formatted(countField.getJsonName()));
+        }
+
         return builder
-                .setCount(Long.parseLong(String.valueOf(map.get(countField.getJsonName()))))
+                .setCount(Long.parseLong(String.valueOf(count)))
                 .setApproximate(Boolean.parseBoolean(String.valueOf(map.getOrDefault(approximateField.getJsonName(), false))))
                 .build();
     }

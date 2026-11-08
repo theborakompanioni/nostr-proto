@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Parse all filters in `COUNT` requests
 - Run Checkstyle and SpotBugs when scheduled and write reports to the expected directory
+- Reject trailing content after JSON messages
+- Report clear errors for non-object events, filters, and count results
+- Report a missing `count` property in `COUNT` responses
 
 ## [0.5.0] - 2026-09-05
 ## Breaking

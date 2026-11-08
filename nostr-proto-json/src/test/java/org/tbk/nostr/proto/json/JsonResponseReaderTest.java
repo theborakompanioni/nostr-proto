@@ -450,12 +450,98 @@ class JsonResponseReaderTest {
     }
 
     @Test
-    void itShouldFailToParseCountResponseWithInvalidResult() {
-        assertThrows(NumberFormatException.class, () -> JsonResponseReader.fromJson("""
+    void itShouldFailToParseCountResponseWithMissingCount() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("""
                 ["COUNT", "subscription_id", {}]
                 """, Response.newBuilder()));
+
+        assertThat(exception.getMessage(), is("Missing property 'count'"));
+    }
+
+    @Test
+    void itShouldFailToParseCountResponseWithInvalidResult() {
         assertThrows(NumberFormatException.class, () -> JsonResponseReader.fromJson("""
                 ["COUNT", "subscription_id", {"count": "not-a-number"}]
                 """, Response.newBuilder()));
+    }
+
+    @Test
+    void itShouldRejectTrailingContent() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("""
+                ["NOTICE", "hello"] trailing
+                """, Response.newBuilder()));
+
+        assertThat(exception.getMessage(), is("Unexpected trailing content"));
+    }
+
+    @Test
+    void itShouldAllowTrailingWhitespace() {
+        Response response = JsonResponseReader.fromJson("[ \"NOTICE\", \"hello\" ] \t\r\n", Response.newBuilder());
+
+        assertThat(response.getNotice().getMessage(), is("hello"));
+    }
+
+    @Test
+    void itShouldAllowTrailingWhitespaceWhenParsingEvent() {
+        Event event = JsonReader.fromJson("""
+                {
+                  "id": "",
+                  "pubkey": "",
+                  "created_at": 0,
+                  "kind": 0,
+                  "tags": [ ],
+                  "content": "GM",
+                  "sig": ""
+                }
+                """ + "\t\r\n", Event.newBuilder());
+
+        assertThat(event.getContent(), is("GM"));
+    }
+
+    @Test
+    void itShouldRejectTrailingContentWhenParsingEvent() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> JsonReader.fromJson("""
+                {
+                  "id": "",
+                  "pubkey": "",
+                  "created_at": 0,
+                  "kind": 0,
+                  "tags": [ ],
+                  "content": "",
+                  "sig": ""
+                } trailing
+                """, Event.newBuilder()));
+
+        assertThat(exception.getMessage(), is("Unexpected trailing content"));
+    }
+
+    @Test
+    void itShouldParseContentWithQuotesAndBrackets() {
+        String content = "a \" ] b";
+        Event event = Event.newBuilder()
+                .setContent(content)
+                .build();
+
+        Event parsed = JsonReader.fromJson(JsonWriter.toJson(event), Event.newBuilder());
+
+        assertThat(parsed.getContent(), is(content));
+    }
+
+    @Test
+    void itShouldFailToParseNonObjectEvent() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("""
+                ["EVENT", "subscription_id", "not-an-object"]
+                """, Response.newBuilder()));
+
+        assertThat(exception.getMessage(), is("Expected event to be a JSON object"));
+    }
+
+    @Test
+    void itShouldFailToParseNonObjectCountResult() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> JsonResponseReader.fromJson("""
+                ["COUNT", "subscription_id", "not-an-object"]
+                """, Response.newBuilder()));
+
+        assertThat(exception.getMessage(), is("Expected count result to be a JSON object"));
     }
 }
