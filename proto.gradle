@@ -16,21 +16,21 @@ sourceSets {
 configurations.configureEach {
     resolutionStrategy {
         dependencySubstitution {
-            substitute module("com.google.protobuf:protobuf-javalite") using module("com.google.protobuf:protobuf-java:${rootProject.ext.protobufVersion}")
+            substitute module("com.google.protobuf:protobuf-javalite") using module("com.google.protobuf:protobuf-java:${libs.versions.protobuf.get()}")
         }
     }
 }
 
 dependencies {
-    api "com.google.protobuf:protobuf-java:${rootProject.ext.protobufVersion}"
-    implementation "com.google.protobuf:protobuf-java-util:${rootProject.ext.protobufVersion}"
+    api libs.protobuf.java
+    implementation libs.protobuf.java.util
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:${rootProject.ext.protocVersion}" }
+    protoc { artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.get()}" }
 
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${rootProject.ext.grpcVersion}" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${libs.versions.grpc.get()}" }
     }
 
     generateProtoTasks {

@@ -7,15 +7,15 @@ description = 'Support for datatypes of nostr-proto library'
 dependencies {
     implementation project(':nostr-proto-json')
 
-    implementation "tools.jackson.core:jackson-databind:${rootProject.ext.jackson3Version}"
+    implementation libs.jackson.databind
 
-    testImplementation "tools.jackson.jr:jackson-jr-all:${rootProject.ext.jacksonJr3Version}"
+    testImplementation libs.jackson.jr.all
 
-    testImplementation("io.github.theborakompanioni:nostr-core:${rootProject.ext.nostrSpringBootStarterVersion}") {
+    testImplementation(libs.nostr.core) {
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto-json'
     }
-    testImplementation("io.github.theborakompanioni:nostr-identity:${rootProject.ext.nostrSpringBootStarterVersion}") {
+    testImplementation(libs.nostr.identity) {
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto'
         exclude group: 'io.github.theborakompanioni', module: 'nostr-proto-json'
     }

@@ -11,12 +11,14 @@
          <trusted-key id="015479E1055341431B4545AB72475FD306B9CAB7" group="com.googlecode.javaewah" name="JavaEWAH" version="1.1.13"/>
          <trusted-key id="042B29E928995B9DB963C636C7CA19B7B620D787" group="com.github.stephenc.jcip" name="jcip-annotations" version="1.0-1"/>
          <trusted-key id="06D34ED6FF73DE368A772A781063FE98BCECB758" group="com.puppycrawl.tools" name="checkstyle" version="14.1.0"/>
+         <trusted-key id="06D34ED6FF73DE368A772A781063FE98BCECB758" group="com.puppycrawl.tools" name="checkstyle" version="14.4.0"/>
          <trusted-key id="077E8893A6DCC33DD4A4D5B256E73BA9A0B592D0" group="^org[.]apache[.]logging($|([.].*))" regex="true"/>
          <trusted-key id="0785B3EFF60B1B1BEA94E0BB7C25280EAE63EBE5" group="^org[.]apache[.]httpcomponents($|([.].*))" regex="true"/>
          <trusted-key id="07A4FA67A8222F1B39F9EDAEF8052E4E1BD0DB31" group="^org[.]neo4j($|([.].*))" regex="true"/>
          <trusted-key id="07E20F0103D9DFC697C490D0368557390486F2C5" group="org.awaitility"/>
          <trusted-key id="0B1B71E813C226033B16D8C5F0D228D8FF31B515" group="^io[.]zipkin($|([.].*))" regex="true"/>
-         <trusted-key id="0B743A794876D3C78AB542A118D239B1CBCD2236" group="org.glassfish.jersey" name="jersey-bom" version="4.0.2"/>
+         <trusted-key id="0B743A794876D3C78AB542A118D239B1CBCD2236" group="org.glassfish.jersey" name="jersey-bom" version="4.0.3"/>
+<trusted-key id="0B743A794876D3C78AB542A118D239B1CBCD2236" group="org.glassfish.jersey" name="jersey-bom" version="4.0.2"/>
          <trusted-key id="0CC641C3A62453AB390066C4A41F13C999945293" group="commons-collections" name="commons-collections" version="3.2.2"/>
          <trusted-key id="0CDE80149711EB46DFF17AE421A24B3F8B0F594A" group="org.apache" name="apache" version="16"/>
          <trusted-key id="0D35D3F60078655126908E8AF3D1600878E85A3D" group="io.netty" name="netty-bom"/>
@@ -28,9 +30,10 @@
          <trusted-key id="184454FAD8697760F3E00D2E4A51A45B944FFD51" group="org.apache.tika"/>
          <trusted-key id="1A55F091AD28C07F831FA44D7905DE25C78AD456" group="com.google.protobuf"/>
          <trusted-key id="1A75005E142192223D6A7C3B76E0008D166740A8" group="org.mongodb" name="mongodb-driver-bom"/>
-         <trusted-key id="1AA8CF92D409A73393D0B736BFF2EE42C8282E76" group="org.apache.activemq" name="activemq-bom" version="6.1.8"/>
+         <trusted-key id="1AA8CF92D409A73393D0B736BFF2EE42C8282E76" group="org.apache.activemq" name="activemq-bom" version="6.2.10"/>
+<trusted-key id="1AA8CF92D409A73393D0B736BFF2EE42C8282E76" group="org.apache.activemq" name="activemq-bom" version="6.1.8"/>
          <trusted-key id="1D04A424F505394DBED15D451D0690E353BE126D" group="net.minidev"/>
-         <trusted-key id="1D217F8475EEE9F19AB8DD6B793FD5751A0F0780" group="com.squareup.okhttp3" name="okhttp-bom" version="5.4.0"/>
+         <trusted-key id="5DD80B0DDCCBE005F0A47FD66751E1A6E2001B8D" group="com.squareup.okhttp3" name="okhttp-bom" version="5.5.0"/>
          <trusted-key id="1DBB44E80F61493D6369B5FB95C15058A5EDA4F1" group="^com[.]google($|([.].*))" regex="true"/>
          <trusted-key id="1EE2E8230365CBF844351FE6134A8CD6A0239B74" group="^com[.]netflix[.]nebula($|([.].*))" regex="true"/>
          <trusted-key id="2518174F4111F02779592A6F9757D7E7E06DD2AC" group="io.prometheus"/>
@@ -74,7 +77,8 @@
             <trusting group="io.spring.gradle"/>
             <trusting group="^org[.]springframework($|([.].*))" regex="true"/>
          </trusted-key>
-         <trusted-key id="498AAC354AA5CB36FAAB7608B6E83A2D2E447E56" group="org.apache.cassandra" name="java-driver-bom" version="4.19.2"/>
+         <trusted-key id="498AAC354AA5CB36FAAB7608B6E83A2D2E447E56" group="org.apache.cassandra" name="java-driver-bom" version="4.19.4"/>
+<trusted-key id="498AAC354AA5CB36FAAB7608B6E83A2D2E447E56" group="org.apache.cassandra" name="java-driver-bom" version="4.19.2"/>
          <trusted-key id="4C5F68D09D42BA7FAC888DF9A929EA2321FDBF8F">
             <trusting group="net.sf.saxon"/>
             <trusting group="org.xmlresolver"/>
@@ -109,7 +113,7 @@
          <trusted-key id="8F9A3C6D105B9F57844A721D79E193516BE7998F" group="org.dom4j" name="dom4j" version="2.2.0"/>
          <trusted-key id="8FCD23073248F3C28EF9F80380EF47E549604C05" group="jaxen"/>
          <trusted-key id="9038E36D3B5632F18079F732D0A934077C5D108E" group="io.github.openfeign.form"/>
-         <trusted-key id="9AC5712CABE9635B65663AB0711C0A9A896FE336" group="com.github.luben" name="zstd-jni" version="1.5.7-15"/>
+         <trusted-key id="9AC5712CABE9635B65663AB0711C0A9A896FE336" group="com.github.luben" name="zstd-jni" version="1.5.7-25"/>
          <trusted-key id="9B32CBC0F3F6BA4C13D611FC21871D2A9AB66A31" group="io.rsocket" name="rsocket-bom" version="1.1.5"/>
          <trusted-key id="A22931805BEA371C4B607CD9CCC16740C5666D5A" group="com.github.spullara.mustache.java"/>
          <trusted-key id="A413F67D71BEEC23ADD0CE0ACB43338E060CF9FA" group="org.jacoco"/>
@@ -178,9 +182,9 @@
       </trusted-keys>
    </configuration>
    <components>
-      <component group="com.github.spotbugs" name="com.github.spotbugs.gradle.plugin" version="6.5.11">
-         <artifact name="com.github.spotbugs.gradle.plugin-6.5.11.pom">
-            <sha256 value="0c6a209a65316db979f32f5f3255c35f12e166583edb7862da414e0ee85998a6" origin="Generated by Gradle" reason="Artifact is not signed"/>
+      <component group="com.github.spotbugs" name="com.github.spotbugs.gradle.plugin" version="6.5.13">
+         <artifact name="com.github.spotbugs.gradle.plugin-6.5.13.pom">
+            <sha256 value="5385235c3a2d55c037d1ea1a9b64f34dd752d8abbea80cbbec21be45cca54bff" origin="Generated by Gradle"/>
          </artifact>
       </component>
       <component group="com.google" name="google" version="5">
@@ -214,14 +218,14 @@
             <sha256 value="943e12b100627804638fa285805a0ab788a680266531e650921ebfe4621a8bfa" origin="Generated by Gradle" reason="Artifact is not signed"/>
          </artifact>
       </component>
-      <component group="nebula.lint" name="nebula.lint.gradle.plugin" version="21.2.3">
-         <artifact name="nebula.lint.gradle.plugin-21.2.3.pom">
-            <sha256 value="05d91813c04585f8f4e809143e6cb000c03ab50719e8d22400c35d1cd2cd9d84" origin="Generated by Gradle" reason="Artifact is not signed"/>
+      <component group="nebula.lint" name="nebula.lint.gradle.plugin" version="21.4.1">
+         <artifact name="nebula.lint.gradle.plugin-21.4.1.pom">
+            <sha256 value="34a13b496eebeb245589bb8eefd691300478bc0203a17e252d39aba4d72280b1" origin="Generated by Gradle"/>
          </artifact>
       </component>
-      <component group="nebula.release" name="nebula.release.gradle.plugin" version="21.1.3">
-         <artifact name="nebula.release.gradle.plugin-21.1.3.pom">
-            <sha256 value="ff83a5e8907ce4cfa1e31a91f00b81d5adf88dcd96e34fabae25e41ba1689a53" origin="Generated by Gradle" reason="Artifact is not signed"/>
+      <component group="nebula.release" name="nebula.release.gradle.plugin" version="21.1.4">
+         <artifact name="nebula.release.gradle.plugin-21.1.4.pom">
+            <sha256 value="0f62f1267eb5700f55aecd2a60e91a799ee57c3aafd33cffe9a41c18a18ab9dd" origin="Generated by Gradle"/>
          </artifact>
       </component>
       <component group="org.codehaus.gpars" name="gpars" version="1.2.1">
@@ -245,17 +249,17 @@
             <pgp value="5989BAF76217B843D66BE55B2D0E1FB8FE4B68B4"/>
          </artifact>
       </component>
-      <component group="org.jreleaser" name="jreleaser-gradle-plugin" version="1.26.0">
-         <artifact name="jreleaser-gradle-plugin-1.26.0.jar">
-            <sha256 value="9ee161b9b6fcbe27d8a2652cf5f15dc4974098b8e283297983ce7b2755ef6ebe" origin="Generated by Gradle" reason="Artifact is not signed"/>
+      <component group="org.jreleaser" name="jreleaser-gradle-plugin" version="1.27.0">
+         <artifact name="jreleaser-gradle-plugin-1.27.0.jar">
+            <sha256 value="a0d252bd049bb20590410bc9204a4d1f53f42d6f5188862b882a1958cffa1986" origin="Generated by Gradle"/>
          </artifact>
-         <artifact name="jreleaser-gradle-plugin-1.26.0.pom">
-            <sha256 value="898d4ff21211af954d27ba92903004013f613993d503c8d7e5d864d817616f90" origin="Generated by Gradle" reason="Artifact is not signed"/>
+         <artifact name="jreleaser-gradle-plugin-1.27.0.pom">
+            <sha256 value="cd778f00e1d8ff3d91dc6269d1f1734029b747861adddd1430a50feabccb3da2" origin="Generated by Gradle"/>
          </artifact>
       </component>
-      <component group="org.jreleaser" name="org.jreleaser.gradle.plugin" version="1.26.0">
-         <artifact name="org.jreleaser.gradle.plugin-1.26.0.pom">
-            <sha256 value="e0e6492b3ccc4f3ef50d93f1f91d15ab978cac43e47f2a1afd62d7c75d29da3c" origin="Generated by Gradle" reason="Artifact is not signed"/>
+      <component group="org.jreleaser" name="org.jreleaser.gradle.plugin" version="1.27.0">
+         <artifact name="org.jreleaser.gradle.plugin-1.27.0.pom">
+            <sha256 value="372e51ef8a896526e1dc83daeb5d29a9e10bf9b68225770aa32d3e6058fb5007" origin="Generated by Gradle"/>
          </artifact>
       </component>
       <component group="org.kordamp.gradle" name="base-gradle-plugin" version="0.46.10">
