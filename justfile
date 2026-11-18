@@ -62,7 +62,7 @@ test-all:
 # build javadocs
 [group("development")]
 javadoc:
-    @./gradlew javadoc -PjavadocEnabled
+    @./gradlew javadoc
 
 # update metadata for dependency verification
 [group("development")]

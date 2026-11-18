@@ -221,8 +221,7 @@ subprojects {
     tasks.register('dependencyTree', DependencyReportTask) {}
 
     javadoc {
-        onlyIf { project.hasProperty('javadocEnabled') }
-        failOnError = false
+        failOnError = true
     }
 
     spotbugs {

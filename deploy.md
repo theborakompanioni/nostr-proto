@@ -5,7 +5,7 @@
 Publish all modules to Maven Central (notice params `signing.password`):
 ```sh
 ./gradlew --no-parallel \
-    clean assemble -PjavadocEnabled \
+    clean assemble \
     sign -Psigning.password=secret \
     publishNebulaPublicationToStagingDeployRepository \
     jreleaserDeploy -Prelease.version=1.0.0-SNAPSHOT
@@ -15,7 +15,7 @@ Publish an individual module to Maven Central:
 ```sh
 ./gradlew -p nostr/nostr-base \
     --no-parallel \
-    clean assemble -PjavadocEnabled \
+    clean assemble \
     sign -Psigning.password=secret \
     publishNebulaPublicationToStagingDeployRepository \
     jreleaserDeploy -Prelease.version=1.0.0-SNAPSHOT
