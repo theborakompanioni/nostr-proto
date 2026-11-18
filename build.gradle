@@ -168,8 +168,6 @@ subprojects {
     }
 
     test {
-        finalizedBy jacocoTestReport // report is always generated after tests run
-
         useJUnitPlatform()
     }
 
