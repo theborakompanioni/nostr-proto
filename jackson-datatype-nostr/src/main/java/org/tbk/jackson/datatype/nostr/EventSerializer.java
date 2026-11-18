@@ -7,6 +7,13 @@ import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ser.std.StdSerializer;
 
+/**
+ * Serializes an {@link Event} as NIP-01 JSON.
+ *
+ * <p>Delegates to {@link JsonWriter#toJson(Event)}.
+ *
+ * @see EventDeserializer
+ */
 public class EventSerializer extends StdSerializer<Event> {
 
     protected EventSerializer() {

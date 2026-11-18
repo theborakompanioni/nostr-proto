@@ -6,6 +6,13 @@ import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.deser.std.StdDeserializer;
 
+/**
+ * Deserializes an {@link Event} from NIP-01 JSON.
+ *
+ * <p>Delegates to {@link JsonReader#fromJson(String, Event.Builder)}.
+ *
+ * @see EventSerializer
+ */
 public class EventDeserializer extends StdDeserializer<Event> {
 
     protected EventDeserializer() {

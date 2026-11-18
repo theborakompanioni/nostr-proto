@@ -7,6 +7,13 @@ import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.deser.std.StdDeserializer;
 
+/**
+ * Deserializes a {@link Response} from a NIP-01 relay message.
+ *
+ * <p>Delegates to {@link JsonReader#fromJson(String, Response.Builder)}.
+ *
+ * @see ResponseSerializer
+ */
 public class ResponseDeserializer extends StdDeserializer<Response> {
 
     protected ResponseDeserializer() {

@@ -10,6 +10,21 @@ import tools.jackson.databind.JacksonModule;
 import tools.jackson.databind.module.SimpleDeserializers;
 import tools.jackson.databind.module.SimpleSerializers;
 
+/**
+ * Jackson module for the nostr-proto types.
+ *
+ * <p>Registers serializers and deserializers for {@link Event}, {@link Request}, {@link Response}
+ * and {@link ProfileMetadata}.
+ *
+ * <pre>{@code
+ * ObjectMapper mapper = JsonMapper.builder()
+ *         .addModule(new NostrModule())
+ *         .build();
+ * }</pre>
+ *
+ * @see EventSerializer
+ * @see EventDeserializer
+ */
 public class NostrModule extends JacksonModule {
     @Override
     public String getModuleName() {
