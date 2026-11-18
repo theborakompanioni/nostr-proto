@@ -79,7 +79,7 @@ allprojects {
 }
 
 configure(rootProject) {
-    defaultTasks 'clean', 'build', 'integrationTest'
+    defaultTasks 'build', 'integrationTest'
 
     tasks.register('clean', Delete) {
         delete fileTree("${rootProject.projectDir}") {
