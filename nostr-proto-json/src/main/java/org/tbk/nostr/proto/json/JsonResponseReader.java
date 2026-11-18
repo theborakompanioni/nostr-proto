@@ -7,6 +7,9 @@ import org.tbk.nostr.proto.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Reads NIP-01 relay messages from JSON.
+ */
 final class JsonResponseReader {
 
     private JsonResponseReader() {

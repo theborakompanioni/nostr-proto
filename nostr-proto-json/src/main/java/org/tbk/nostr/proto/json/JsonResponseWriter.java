@@ -7,6 +7,9 @@ import java.util.HexFormat;
 
 import static org.tbk.nostr.proto.json.Json.json;
 
+/**
+ * Writes NIP-01 relay messages as JSON.
+ */
 final class JsonResponseWriter {
 
     private JsonResponseWriter() {
