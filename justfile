@@ -59,6 +59,11 @@ test-e2e:
 test-all:
     @./gradlew test integrationTest e2eTest --rerun-tasks --no-parallel
 
+# run unit tests and generate jacoco coverage report
+[group("development")]
+test-coverage:
+    @./gradlew jacocoTestReport
+
 # build javadocs
 [group("development")]
 javadoc:
