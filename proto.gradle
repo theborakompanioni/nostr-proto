@@ -6,10 +6,7 @@ sourceSets {
             // In addition to the default 'src/main/proto'
             srcDir file('src/main/java')
         }
-        java {
-            srcDir new File("${layout.buildDirectory}", '/generated/sources/proto/main/java')
-            srcDir new File("${layout.buildDirectory}", '/generated/sources/proto/main/grpc')
-        }
+        // Generated protobuf/gRPC sources are registered by the protobuf plugin itself.
     }
 }
 

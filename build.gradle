@@ -102,12 +102,6 @@ subprojects {
     apply plugin: 'com.netflix.nebula.integtest-standalone'
     apply plugin: 'io.spring.dependency-management'
 
-    configurations.configureEach {
-        resolutionStrategy {
-            preferProjectModules()
-        }
-    }
-
     java {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
@@ -147,15 +141,14 @@ subprojects {
     }
 
     sourcesJar {
-        // needed till duplicate bug in protobuf gradle plugin is resolved.
-        // see https://github.com/google/protobuf-gradle-plugin/issues/522 (last checked 2023-01-18)
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
+        // nebula already packages `sourceSets.main.allSource` (including generated protobuf code);
+        // adding `sourceSets.main.java` again duplicated entries.
         archiveClassifier.set('sources')
-        from sourceSets.main.java
     }
 
     tasks.register('testJar', Jar) {
+        // Built on demand via `./gradlew testJar`; not wired into `assemble`, which used to
+        // force a full test compilation for every release/tarball build. Not published either.
         archiveClassifier.set('test')
         from sourceSets.test.output
     }
@@ -179,24 +172,24 @@ subprojects {
         useJUnitPlatform()
     }
 
+    // Coverage instrumentation slows down every single test run, while reports are only
+    // needed on demand. Enable it when a report is requested (-Pcoverage forces it).
+    def coverageEnabled = providers.gradleProperty('coverage').isPresent()
+            || gradle.startParameter.taskNames.any { it.toLowerCase().contains('jacocotestreport') }
+
     jacocoTestReport {
         dependsOn test // tests are required to run before generating the report
-
-        /*reports {
-            xml.enabled = true
-            html.enabled = true
-            csv.enabled = false
-        }*/
-    }
-
-    tasks.named("assemble") {
-        dependsOn(testJar)
     }
 
     tasks.withType(Test).configureEach {
+        jacoco {
+            enabled = coverageEnabled
+        }
         testLogging {
-            // set options for log level LIFECYCLE
-            events TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
+            // Per-test PASSED/SKIPPED output costs no measurable time (the suite is small),
+            // so keep it for readable output. STARTED is omitted because it doubles the
+            // lines without adding information.
+            events TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED
             showExceptions = true
             exceptionFormat = TestExceptionFormat.FULL
             showCauses = true
@@ -219,6 +212,9 @@ subprojects {
 
     javadoc {
         failOnError = true
+        // Generated sources (protobuf/gRPC) are not documented API. Including them dominates
+        // javadoc runtime and produces hundreds of warnings for code no one can change anyway.
+        setSource(source.filter { file -> !file.path.replace('\\', '/').contains('/build/generated/') })
     }
 
     spotbugs {
@@ -228,10 +224,18 @@ subprojects {
         excludeFilter = rootProject.file('./spotbugs-exclude.xml')
         reportsDir = rootProject.layout.buildDirectory.dir("reports/spotbugs/$project.name").get().asFile
     }
+
+    // Analysing test source sets roughly doubles quality-gate runtime for little value.
+    // Run with -PspotbugsAllSourceSets to include them (see `just spotbugs`).
+    def spotbugsAllSourceSets = providers.gradleProperty('spotbugsAllSourceSets').isPresent()
+
     tasks.withType(SpotBugsTask).configureEach {
         reports {
             html.required = true
             xml.required = false
+        }
+        if (!name.endsWith('Main') && !spotbugsAllSourceSets) {
+            enabled = false
         }
     }
 
