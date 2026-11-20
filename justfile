@@ -47,22 +47,28 @@ test:
 # run integration tests
 [group("development")]
 test-integration:
-    @./gradlew integrationTest --rerun-tasks --no-parallel
+    @./gradlew integrationTest --rerun
 
 # run end-to-end tests
 [group("development")]
 test-e2e:
-    @./gradlew e2eTest --rerun-tasks --no-parallel
+    @./gradlew e2eTest --rerun
 
 # run all tests
 [group("development")]
 test-all:
-    @./gradlew test integrationTest e2eTest --rerun-tasks --no-parallel
+    # `--rerun` only applies to the last task selector, so force re-execution of the whole (small) graph
+    @./gradlew test integrationTest e2eTest --rerun-tasks
+
+# run unit tests and generate jacoco coverage report
+[group("development")]
+test-coverage:
+    @./gradlew jacocoTestReport
 
 # build javadocs
 [group("development")]
 javadoc:
-    @./gradlew javadoc -PjavadocEnabled
+    @./gradlew javadoc
 
 # update metadata for dependency verification
 [group("development")]
@@ -92,7 +98,7 @@ checkstyle:
 # spot bugs
 [group("development")]
 spotbugs:
-    @./gradlew spotbugsMain spotbugsTest spotbugsIntegTest spotbugsE2eTest
+    @./gradlew -PspotbugsAllSourceSets spotbugsMain spotbugsTest spotbugsIntegTest spotbugsE2eTest
 
 # lint files
 [group("development")]

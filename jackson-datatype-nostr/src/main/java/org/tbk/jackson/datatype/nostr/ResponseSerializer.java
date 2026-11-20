@@ -8,6 +8,13 @@ import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ser.std.StdSerializer;
 
+/**
+ * Serializes a {@link Response} as a NIP-01 relay message.
+ *
+ * <p>Delegates to {@link JsonWriter#toJson(Response)}.
+ *
+ * @see ResponseDeserializer
+ */
 public class ResponseSerializer extends StdSerializer<Response> {
 
     protected ResponseSerializer() {

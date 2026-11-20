@@ -7,6 +7,13 @@ import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ser.std.StdSerializer;
 
+/**
+ * Serializes a {@link Request} as a NIP-01 client message.
+ *
+ * <p>Delegates to {@link JsonWriter#toJson(Request)}.
+ *
+ * @see RequestDeserializer
+ */
 public class RequestSerializer extends StdSerializer<Request> {
 
     protected RequestSerializer() {

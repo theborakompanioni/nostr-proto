@@ -15,6 +15,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Shared JSON configuration and conversions between protobuf messages and JSON values.
+ */
 final class Json {
 
     private Json() {

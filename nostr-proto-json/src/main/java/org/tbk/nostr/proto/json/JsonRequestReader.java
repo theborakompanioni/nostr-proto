@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * Reads NIP-01 client messages from JSON.
+ */
 final class JsonRequestReader {
 
     private JsonRequestReader() {

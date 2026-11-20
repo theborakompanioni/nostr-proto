@@ -43,11 +43,8 @@ jobs:
       - name: Lint Gradle File
         run: ./gradlew autoLintGradle --no-parallel
 
-      - name: Build project
-        run: ./gradlew build spotbugsMain -x test
-
-      - name: Unit Test
-        run: ./gradlew test
+      - name: Build and Unit Test
+        run: ./gradlew build
 
       - name: Integration Test
         run: ./gradlew integrationTest --no-parallel

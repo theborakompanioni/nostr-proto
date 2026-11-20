@@ -6,10 +6,7 @@ sourceSets {
             // In addition to the default 'src/main/proto'
             srcDir file('src/main/java')
         }
-        java {
-            srcDir new File("${layout.buildDirectory}", '/generated/sources/proto/main/java')
-            srcDir new File("${layout.buildDirectory}", '/generated/sources/proto/main/grpc')
-        }
+        // Generated protobuf/gRPC sources are registered by the protobuf plugin itself.
     }
 }
 
@@ -27,10 +24,10 @@ dependencies {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.get()}" }
+    protoc { artifact = libs.protoc.get().toString() }
 
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${libs.versions.grpc.get()}" }
+        grpc { artifact = libs.grpc.protoc.gen.java.get().toString() }
     }
 
     generateProtoTasks {

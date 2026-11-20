@@ -6,6 +6,13 @@ import tools.jackson.core.JsonParser;
 import tools.jackson.databind.DeserializationContext;
 import tools.jackson.databind.deser.std.StdDeserializer;
 
+/**
+ * Deserializes a {@link Request} from a NIP-01 client message.
+ *
+ * <p>Delegates to {@link JsonReader#fromJson(String, Request.Builder)}.
+ *
+ * @see RequestSerializer
+ */
 public class RequestDeserializer extends StdDeserializer<Request> {
 
     protected RequestDeserializer() {

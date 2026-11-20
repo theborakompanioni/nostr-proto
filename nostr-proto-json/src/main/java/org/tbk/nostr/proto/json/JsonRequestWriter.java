@@ -13,6 +13,9 @@ import java.util.Map;
 import static org.tbk.nostr.proto.json.Json.json;
 import static org.tbk.nostr.proto.json.Json.jsonForSigning;
 
+/**
+ * Writes NIP-01 client messages as JSON.
+ */
 final class JsonRequestWriter {
 
     private JsonRequestWriter() {
@@ -85,19 +88,7 @@ final class JsonRequestWriter {
     }
 
     /**
-     * See: <a href="https://github.com/nostr-protocol/nips/blob/master/01.md">NIP-01</a>.
-     *
-     * <p>
-     * <code>
-     * [
-     * 0,
-     * &lt;pubkey, as a lowercase hex string&gt;,
-     * &lt;created_at, as a number&gt;,
-     * &lt;kind, as a number&gt;,
-     * &lt;tags, as an array of arrays of non-null strings&gt;,
-     * &lt;content, as a string&gt;
-     * ]
-     * </code>
+     * Serializes the event for signing; see {@link JsonWriter#toJsonForSigning(EventOrBuilder)}.
      */
     static String toJsonForSigning(EventOrBuilder e) {
         return jsonForSigning.composeString()
