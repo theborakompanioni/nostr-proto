@@ -6,7 +6,7 @@ jackson = "3.3.0"
 nostr = "0.6.0"
 protobuf = "4.36.2"
 protobufGradle = "0.10.1"
-springBoot = "4.1.2"
+springBoot = "4.2.0"
 
 [libraries]
 findsecbugs-plugin = { module = "com.h3xstream.findsecbugs:findsecbugs-plugin", version.ref = "findsecbugs" }
